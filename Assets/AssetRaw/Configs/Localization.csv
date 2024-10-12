@@ -1,0 +1,15 @@
+﻿Key,Type,Desc,ChineseSimplified [zh],English
+Language.ChineseSimplified,Text,Chinese,中文,Chinese
+Language.English,Text,English,英语,English
+Menu.ChangeLanguageButton,Text,ChangeLanguage,更改语言,ChangeLanguage
+Menu.Setting,Text,Set,设置,Set
+Menu.StartButton,Text,Start,开始,Start
+Scene1.Scene1,Text,Scene1,场景1,Scene1
+Scene1.To2,Text,To Scene2,前往场景2,To Scene2
+Scene2.Scene2,Text,Scene2,场景2,Scene2
+Scene2.To2,Text,To Scene1,前往场景1,To Scene1
+Setting.CancelButton,Text,Cancel,取消,Cancel
+Setting.ConfirmButton,Text,Confirm,确定,Confirm
+Setting.Music,Text,Music,音乐,Music
+Setting.Sound,Text,Sound,音效,Sound
+Setting.UISound,Text,UISound,UI音效,UISound
