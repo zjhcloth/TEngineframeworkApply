@@ -76,17 +76,21 @@ SpriteAtlas:
     secondaryTextureSettings: {}
     variantMultiplier: 1
     packables:
+    - {fileID: 21300000, guid: 02e3fc9600819604199c555c0c5b70f3, type: 3}
     - {fileID: 21300000, guid: d128e33018c2cfc489213dfa91632131, type: 3}
     bindAsDefault: 1
     isAtlasV2: 0
     cachedData: {fileID: 0}
     packedSpriteRenderDataKeys:
     - d128e33018c2cfc489213dfa91632131: 21300000
+    - 02e3fc9600819604199c555c0c5b70f3: 21300000
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
   - {fileID: 21300000, guid: d128e33018c2cfc489213dfa91632131, type: 3}
+  - {fileID: 21300000, guid: 02e3fc9600819604199c555c0c5b70f3, type: 3}
   m_PackedSpriteNamesToIndex:
   - JoyStick_0
+  - Card_1035
   m_RenderDataMap: {}
   m_Tag: UIRaw_Atlas
   m_IsVariant: 0

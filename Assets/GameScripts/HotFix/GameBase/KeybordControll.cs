@@ -20,9 +20,9 @@ public class NewBehaviourScript : MonoBehaviour
         Vector3 direction = Vector3.forward * vertical + Vector3.right * horizontal;
         position += -direction * speed * Time.deltaTime;
         mapController.position = position;
-        if (position.z < -8) mapController.position = new Vector3(position.x,position.y,-7.9f);
-        if (position.z > -3.8f) mapController.position = new Vector3(position.x,position.y,-3.9f);
-        if (position.x < -1) mapController.position = new Vector3(-0.95f,position.y,position.z);
-        if (position.x > 1f) mapController.position = new Vector3(0.98f,position.y,position.z);
+        //if (position.z < -8) mapController.position = new Vector3(position.x,position.y,-7.9f);
+        //if (position.z > -3.8f) mapController.position = new Vector3(position.x,position.y,-3.9f);
+        //if (position.x < -1) mapController.position = new Vector3(-0.95f,position.y,position.z);
+        //if (position.x > 1f) mapController.position = new Vector3(0.98f,position.y,position.z);
     }
 }

@@ -1,7 +1,8 @@
 {
     "name": "zframework.ui.joystick.demo",
     "references": [
-        "zframework.ui.joystick"
+        "zframework.ui.joystick",
+        "TEngine.Runtime"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
