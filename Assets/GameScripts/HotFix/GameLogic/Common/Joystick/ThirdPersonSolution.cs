@@ -54,29 +54,28 @@ namespace zFrame.Example
                 if (v.magnitude != 0)
                 {
                     animator.SetBool("IsWalking", true);
-
-                    Vector3 direction = new Vector3(v.x, 0, v.y);
-                    controller.Move(direction * speed * Time.deltaTime);
-                    
-                    // if (transform.position.z < -6.4) transform.position = new Vector3(transform.position.x,transform.position.y,-6.3f);
-                    // if (transform.position.z > -3.8f) transform.position = new Vector3(transform.position.x,transform.position.y,-3.9f);
-                    // if (transform.position.x < -1) transform.position = new Vector3(-0.95f,transform.position.y,transform.position.z);
-                    // if (transform.position.x > 1) transform.position = new Vector3(0.95f,transform.position.y,transform.position.z);
-                    
+                    //角色不用移动，移动背景就好了
+                    // Vector3 direction = new Vector3(v.x, 0, v.y);
+                    // controller.Move(direction * speed * Time.deltaTime);
                     //背景移动
                     Vector3 bgDirection = new Vector3(-v.x,  -v.y,0);//背景要反向移动
-                    bgTf.position += bgDirection * bgSpeed * Time.deltaTime;
-                    
-                    // if (bgTf.position.z < -6.4) bgTf.position = new Vector3(bgTf.position.x,bgTf.position.y,-6.3f);
-                    // if (bgTf.position.z > -3.8f) bgTf.position = new Vector3(bgTf.position.x,bgTf.position.y,-3.9f);
-                    // if (bgTf.position.x < -1) bgTf.position = new Vector3(-0.95f,bgTf.position.y,bgTf.position.z);
-                    // if (bgTf.position.x > 1) bgTf.position = new Vector3(0.95f,bgTf.position.y,bgTf.position.z);
-                    
+                    //bgTf.position += bgDirection * bgSpeed * Time.deltaTime;
+                    Vector3 bgPosition = bgTf.position;
+                    bgPosition += bgDirection * bgSpeed * Time.deltaTime;
+                    bgPosition.x = Mathf.Clamp(bgPosition.x, -1.2f, 1);
+                    bgPosition.y = Mathf.Clamp(bgPosition.y, -4.6f, 4.6f);
+                    bgTf.position = bgPosition;
+                
                     //前景移动
                     Vector3 frontDirection = new Vector3(-v.x,  0,-v.y);//背景要反向移动
-                    frontTf.position += frontDirection * frontSpeed * Time.deltaTime;
+                    //frontTf.position += frontDirection * frontSpeed * Time.deltaTime;
+                    Vector3 fontfPosition = frontTf.position;
+                    fontfPosition += frontDirection * frontSpeed * Time.deltaTime;
+                    fontfPosition.x = Mathf.Clamp(fontfPosition.x, -1.9f, 1.9f);
+                    fontfPosition.z = Mathf.Clamp(fontfPosition.z, -7.4f, 1.6f);
+                    frontTf.position = fontfPosition;
 
-                    
+
                     //角色转向
                     playerRenderer.flipX = v.x < 0;
                     //变阵用的主角朝向
