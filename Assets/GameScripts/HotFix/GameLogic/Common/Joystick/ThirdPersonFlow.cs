@@ -53,9 +53,11 @@ public class ThirdPersonFlow : MonoBehaviour
         });
     }
 
+    /**
+     * 当主角方向改变的时候，这边要改变阵型
+     */
     private void OnLeaderMoveDirChange(MoveDir dir)
     {
-        Debug.Log($"dir======{dir}");
         changeTarget = true;
         switch (posType)
         {
@@ -218,10 +220,36 @@ public class ThirdPersonFlow : MonoBehaviour
     
     
     public float followSpeed = 5f;  // 跟随速度
+    public float minDistance = 0.5f;  // 最小距离
+    public float separationForce = 0.5f;  // 分离力度
+    public PartnerController[] otherPartners;
+
     void Update()
     {
-        if(changeTarget)
+        if (changeTarget)
+        {
             transform.position = Vector3.Lerp(transform.position, targetPosition, followSpeed * Time.deltaTime);
+            // 检测并进行分离调整
+            foreach (PartnerController partner in otherPartners)
+            {
+                if (partner != this)
+                {
+                    float distance = Vector2.Distance(transform.position, partner.transform.position);
+                    if (distance < minDistance)
+                    {
+                        Vector2 separationDirection = (transform.position - partner.transform.position).normalized;
+                        transform.position += (Vector3)(separationDirection * separationForce * Time.deltaTime);
+                    }
+                }
+            }
+
+            float leaderDistance = Vector2.Distance(transform.position, leader.position);
+            if (leaderDistance < minDistance)
+            {
+                Vector2 separationDirection = (transform.position - leader.position).normalized;
+                transform.position += (Vector3)(separationDirection * separationForce * Time.deltaTime);
+            }
+        }
     }
     
 }

@@ -1166,6 +1166,17 @@ MonoBehaviour:
   speed: 1
   posType: 1
   followSpeed: 5
+  minDistance: 0.5
+  separationForce: 0.5
+  otherPartners:
+  - {fileID: 823460153}
+  - {fileID: 1138006339}
+  - {fileID: 1373445781}
+  - {fileID: 913240257}
+  - {fileID: 1868336785}
+  - {fileID: 1755844894}
+  - {fileID: 1897300014}
+  - {fileID: 997242650}
 --- !u!143 &823460152
 CharacterController:
   m_ObjectHideFlags: 0
@@ -1358,6 +1369,17 @@ MonoBehaviour:
   speed: 1
   posType: 9
   followSpeed: 5
+  minDistance: 0.5
+  separationForce: 0.5
+  otherPartners:
+  - {fileID: 823460153}
+  - {fileID: 1138006339}
+  - {fileID: 1373445781}
+  - {fileID: 913240257}
+  - {fileID: 1868336785}
+  - {fileID: 1755844894}
+  - {fileID: 1897300014}
+  - {fileID: 997242650}
 --- !u!95 &913240255
 Animator:
   serializedVersion: 5
@@ -1578,6 +1600,17 @@ MonoBehaviour:
   speed: 1
   posType: 8
   followSpeed: 5
+  minDistance: 0.5
+  separationForce: 0.5
+  otherPartners:
+  - {fileID: 823460153}
+  - {fileID: 1138006339}
+  - {fileID: 1373445781}
+  - {fileID: 913240257}
+  - {fileID: 1868336785}
+  - {fileID: 1755844894}
+  - {fileID: 1897300014}
+  - {fileID: 997242650}
 --- !u!143 &997242649
 CharacterController:
   m_ObjectHideFlags: 0
@@ -1779,6 +1812,17 @@ MonoBehaviour:
   speed: 1
   posType: 3
   followSpeed: 5
+  minDistance: 0.5
+  separationForce: 0.5
+  otherPartners:
+  - {fileID: 823460153}
+  - {fileID: 1138006339}
+  - {fileID: 1373445781}
+  - {fileID: 913240257}
+  - {fileID: 1868336785}
+  - {fileID: 1755844894}
+  - {fileID: 1897300014}
+  - {fileID: 997242650}
 --- !u!95 &1138006337
 Animator:
   serializedVersion: 5
@@ -2027,6 +2071,17 @@ MonoBehaviour:
   speed: 1
   posType: 7
   followSpeed: 5
+  minDistance: 0.5
+  separationForce: 0.5
+  otherPartners:
+  - {fileID: 823460153}
+  - {fileID: 1138006339}
+  - {fileID: 1373445781}
+  - {fileID: 913240257}
+  - {fileID: 1868336785}
+  - {fileID: 1755844894}
+  - {fileID: 1897300014}
+  - {fileID: 997242650}
 --- !u!95 &1373445779
 Animator:
   serializedVersion: 5
@@ -2736,6 +2791,17 @@ MonoBehaviour:
   speed: 1
   posType: 6
   followSpeed: 5
+  minDistance: 0.5
+  separationForce: 0.5
+  otherPartners:
+  - {fileID: 823460153}
+  - {fileID: 1138006339}
+  - {fileID: 1373445781}
+  - {fileID: 913240257}
+  - {fileID: 1868336785}
+  - {fileID: 1755844894}
+  - {fileID: 1897300014}
+  - {fileID: 997242650}
 --- !u!143 &1755844893
 CharacterController:
   m_ObjectHideFlags: 0
@@ -2858,6 +2924,17 @@ MonoBehaviour:
   speed: 1
   posType: 4
   followSpeed: 5
+  minDistance: 0.5
+  separationForce: 0.5
+  otherPartners:
+  - {fileID: 823460153}
+  - {fileID: 1138006339}
+  - {fileID: 1373445781}
+  - {fileID: 913240257}
+  - {fileID: 1868336785}
+  - {fileID: 1755844894}
+  - {fileID: 1897300014}
+  - {fileID: 997242650}
 --- !u!95 &1868336783
 Animator:
   serializedVersion: 5
@@ -3078,6 +3155,17 @@ MonoBehaviour:
   speed: 1
   posType: 2
   followSpeed: 5
+  minDistance: 0.5
+  separationForce: 0.5
+  otherPartners:
+  - {fileID: 823460153}
+  - {fileID: 1138006339}
+  - {fileID: 1373445781}
+  - {fileID: 913240257}
+  - {fileID: 1868336785}
+  - {fileID: 1755844894}
+  - {fileID: 1897300014}
+  - {fileID: 997242650}
 --- !u!143 &1897300013
 CharacterController:
   m_ObjectHideFlags: 0
