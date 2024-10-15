@@ -64,152 +64,152 @@ public class ThirdPersonFlow : MonoBehaviour
             case FlowPosType.FontUp:
                 if (dir == MoveDir.None || dir == MoveDir.Right)
                 {
-                    targetPosition = leader.position + new Vector3(0.3f, 0.3f, 0);
+                    targetPosition = leader.position + new Vector3(1.3f, 1f, 0);
                 }
                 else if (dir == MoveDir.Left)
                 {
-                    targetPosition = leader.position + new Vector3(-0.3f, 0.3f, 0);
+                    targetPosition = leader.position + new Vector3(-1.3f, 1f, 0);
                 }
                 else if (dir == MoveDir.Up)
                 {
-                    targetPosition = leader.position + new Vector3(-0.3f, 0.3f, 0);
+                    targetPosition = leader.position + new Vector3(-1.3f, 1f, 0);
                 }
                 else if (dir == MoveDir.Down)
                 {
-                    targetPosition = leader.position + new Vector3(0.3f, -0.3f, 0);
+                    targetPosition = leader.position + new Vector3(1.3f, -1f, 0);
                 }
 
                 break;
             case FlowPosType.Font:
                 if (dir == MoveDir.None || dir == MoveDir.Right)
                 {
-                    targetPosition = leader.position + new Vector3(0.3f, 0, 0);
+                    targetPosition = leader.position + new Vector3(1.3f, 0, 0);
                 }
                 else if (dir == MoveDir.Left)
                 {
-                    targetPosition = leader.position + new Vector3(-0.3f, 0, 0);
+                    targetPosition = leader.position + new Vector3(-1.3f, 0, 0);
                 }
                 else if (dir == MoveDir.Up)
                 {
-                    targetPosition = leader.position + new Vector3(0, 0.3f, 0);
+                    targetPosition = leader.position + new Vector3(0, 1f, 0);
                 }
                 else if (dir == MoveDir.Down)
                 {
-                    targetPosition = leader.position + new Vector3(0, -0.3f, 0);
+                    targetPosition = leader.position + new Vector3(0, -1f, 0);
                 }
 
                 break;
             case FlowPosType.FontDown:
                 if (dir == MoveDir.None || dir == MoveDir.Right)
                 {
-                    targetPosition = leader.position + new Vector3(0.3f, -0.3f, 0);
+                    targetPosition = leader.position + new Vector3(1.3f, -1f, 0);
                 }
                 else if (dir == MoveDir.Left)
                 {
-                    targetPosition = leader.position + new Vector3(-0.3f, -0.3f, 0);
+                    targetPosition = leader.position + new Vector3(-1.3f, -1f, 0);
                 }
                 else if (dir == MoveDir.Up)
                 {
-                    targetPosition = leader.position + new Vector3(0.3f, 0.3f, 0);
+                    targetPosition = leader.position + new Vector3(1.3f, 1f, 0);
                 }
                 else if (dir == MoveDir.Down)
                 {
-                    targetPosition = leader.position + new Vector3(-0.3f, -0.3f, 0);
+                    targetPosition = leader.position + new Vector3(-1.3f, -1f, 0);
                 }
 
                 break;
             case FlowPosType.Up:
                 if (dir == MoveDir.None || dir == MoveDir.Right)
                 {
-                    targetPosition = leader.position + new Vector3(0, 0.3f, 0);
+                    targetPosition = leader.position + new Vector3(0, 1f, 0);
                 }
                 else if (dir == MoveDir.Left)
                 {
-                    targetPosition = leader.position + new Vector3(0, 0.3f, 0);
+                    targetPosition = leader.position + new Vector3(0, 1f, 0);
                 }
                 else if (dir == MoveDir.Up)
                 {
-                    targetPosition = leader.position + new Vector3(-0.3f, 0, 0);
+                    targetPosition = leader.position + new Vector3(-1.3f, 0, 0);
                 }
                 else if (dir == MoveDir.Down)
                 {
-                    targetPosition = leader.position + new Vector3(0.3f, 0, 0);
+                    targetPosition = leader.position + new Vector3(1.3f, 0, 0);
                 }
 
                 break;
             case FlowPosType.Down:
                 if (dir == MoveDir.None || dir == MoveDir.Right)
                 {
-                    targetPosition = leader.position + new Vector3(0, -0.3f, 0);
+                    targetPosition = leader.position + new Vector3(0, -1f, 0);
                 }
                 else if (dir == MoveDir.Left)
                 {
-                    targetPosition = leader.position + new Vector3(0, -0.3f, 0);
+                    targetPosition = leader.position + new Vector3(0, -1f, 0);
                 }
                 else if (dir == MoveDir.Up)
                 {
-                    targetPosition = leader.position + new Vector3(0.3f, 0, 0);
+                    targetPosition = leader.position + new Vector3(1.3f, 0, 0);
                 }
                 else if (dir == MoveDir.Down)
                 {
-                    targetPosition = leader.position + new Vector3(-0.3f, 0, 0);
+                    targetPosition = leader.position + new Vector3(-1.3f, 0, 0);
                 }
 
                 break;
             case FlowPosType.BackUp:
                 if (dir == MoveDir.None || dir == MoveDir.Right)
                 {
-                    targetPosition = leader.position + new Vector3(-0.3f, 0.3f, 0);
+                    targetPosition = leader.position + new Vector3(-1.3f, 1f, 0);
                 }
                 else if (dir == MoveDir.Left)
                 {
-                    targetPosition = leader.position + new Vector3(0.3f, 0.3f, 0);
+                    targetPosition = leader.position + new Vector3(1.3f, 1f, 0);
                 }
                 else if (dir == MoveDir.Up)
                 {
-                    targetPosition = leader.position + new Vector3(-0.3f, -0.3f, 0);
+                    targetPosition = leader.position + new Vector3(-1.3f, -1f, 0);
                 }
                 else if (dir == MoveDir.Down)
                 {
-                    targetPosition = leader.position + new Vector3(0.3f, 0.3f, 0);
+                    targetPosition = leader.position + new Vector3(1.3f, 1f, 0);
                 }
 
                 break;
             case FlowPosType.BackDown:
                 if (dir == MoveDir.None || dir == MoveDir.Right)
                 {
-                    targetPosition = leader.position + new Vector3(-0.3f, -0.3f, 0);
+                    targetPosition = leader.position + new Vector3(-1.3f, -1f, 0);
                 }
                 else if (dir == MoveDir.Left)
                 {
-                    targetPosition = leader.position + new Vector3(0.3f, -0.3f, 0);
+                    targetPosition = leader.position + new Vector3(1.3f, -1f, 0);
                 }
                 else if (dir == MoveDir.Up)
                 {
-                    targetPosition = leader.position + new Vector3(0.3f, -0.3f, 0);
+                    targetPosition = leader.position + new Vector3(1.3f, -1f, 0);
                 }
                 else if (dir == MoveDir.Down)
                 {
-                    targetPosition = leader.position + new Vector3(-0.3f, 0.3f, 0);
+                    targetPosition = leader.position + new Vector3(-1.3f, 1f, 0);
                 }
 
                 break;
             case FlowPosType.Back:
                 if (dir == MoveDir.None || dir == MoveDir.Right)
                 {
-                    targetPosition = leader.position + new Vector3(-0.3f, 0, 0);
+                    targetPosition = leader.position + new Vector3(-1.3f, 0, 0);
                 }
                 else if (dir == MoveDir.Left)
                 {
-                    targetPosition = leader.position + new Vector3(0.3f, 0, 0);
+                    targetPosition = leader.position + new Vector3(1.3f, 0, 0);
                 }
                 else if (dir == MoveDir.Up)
                 {
-                    targetPosition = leader.position + new Vector3(0, -0.3f, 0);
+                    targetPosition = leader.position + new Vector3(0, -1f, 0);
                 }
                 else if (dir == MoveDir.Down)
                 {
-                    targetPosition = leader.position + new Vector3(0, 0.3f, 0);
+                    targetPosition = leader.position + new Vector3(0, 1f, 0);
                 }
 
                 break;

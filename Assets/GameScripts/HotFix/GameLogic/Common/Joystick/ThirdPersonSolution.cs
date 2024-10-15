@@ -62,8 +62,8 @@ namespace zFrame.Example
                     //bgTf.position += bgDirection * bgSpeed * Time.deltaTime;
                     Vector3 bgPosition = bgTf.position;
                     bgPosition += bgDirection * bgSpeed * Time.deltaTime;
-                    bgPosition.x = Mathf.Clamp(bgPosition.x, -1.2f, 1);
-                    bgPosition.y = Mathf.Clamp(bgPosition.y, -4.6f, 4.6f);
+                    bgPosition.x = Mathf.Clamp(bgPosition.x, -9f, 9f);
+                    bgPosition.y = Mathf.Clamp(bgPosition.y, 2.6f, 6f);
                     bgTf.position = bgPosition;
                 
                     //前景移动
@@ -71,8 +71,8 @@ namespace zFrame.Example
                     //frontTf.position += frontDirection * frontSpeed * Time.deltaTime;
                     Vector3 fontfPosition = frontTf.position;
                     fontfPosition += frontDirection * frontSpeed * Time.deltaTime;
-                    fontfPosition.x = Mathf.Clamp(fontfPosition.x, -1.9f, 1.9f);
-                    fontfPosition.z = Mathf.Clamp(fontfPosition.z, -7.4f, 1.6f);
+                    fontfPosition.x = Mathf.Clamp(fontfPosition.x, -4.6f, 4.3f);
+                    fontfPosition.z = Mathf.Clamp(fontfPosition.z, -6.6f, -0.3f);
                     frontTf.position = fontfPosition;
 
 
