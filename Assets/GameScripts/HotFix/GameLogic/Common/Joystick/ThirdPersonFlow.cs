@@ -214,8 +214,6 @@ public class ThirdPersonFlow : MonoBehaviour
 
                 break;
         }
-
-        Debug.Log(targetPosition);
     }
     
     

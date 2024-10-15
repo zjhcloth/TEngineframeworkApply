@@ -22,11 +22,12 @@ namespace zFrame.Example
     using zFrame.UI;
     public class ThirdPersonSolution : MonoBehaviour
     {
-        
-
-        
+        public Transform bgTf;
+        public Transform frontTf;
         public Joystick joystick;
-        public float speed = 5;
+        public float speed = 1;
+        public float bgSpeed = 0.1f;
+        public float frontSpeed = 2f;
         CharacterController controller;
         private Animator animator;
         private SpriteRenderer playerRenderer;
@@ -53,23 +54,35 @@ namespace zFrame.Example
                 if (v.magnitude != 0)
                 {
                     animator.SetBool("IsWalking", true);
-                    float x = transform.position.x;
-                    Vector3 direction = new Vector3(v.x, v.y, 0);
+
+                    Vector3 direction = new Vector3(v.x, 0, v.y);
                     controller.Move(direction * speed * Time.deltaTime);
-                    float afterX = transform.position.x;
-                    // if (afterX>x)
-                    // {
-                    //     transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
-                    // }
-                    // else
-                    // {
-                    //     transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
-                    // }
-                    //transform.rotation = Quaternion.LookRotation(new Vector3(v.x, v.y, 0));
+                    
+                    // if (transform.position.z < -6.4) transform.position = new Vector3(transform.position.x,transform.position.y,-6.3f);
+                    // if (transform.position.z > -3.8f) transform.position = new Vector3(transform.position.x,transform.position.y,-3.9f);
+                    // if (transform.position.x < -1) transform.position = new Vector3(-0.95f,transform.position.y,transform.position.z);
+                    // if (transform.position.x > 1) transform.position = new Vector3(0.95f,transform.position.y,transform.position.z);
+                    
+                    //背景移动
+                    Vector3 bgDirection = new Vector3(-v.x,  -v.y,0);//背景要反向移动
+                    bgTf.position += bgDirection * bgSpeed * Time.deltaTime;
+                    
+                    // if (bgTf.position.z < -6.4) bgTf.position = new Vector3(bgTf.position.x,bgTf.position.y,-6.3f);
+                    // if (bgTf.position.z > -3.8f) bgTf.position = new Vector3(bgTf.position.x,bgTf.position.y,-3.9f);
+                    // if (bgTf.position.x < -1) bgTf.position = new Vector3(-0.95f,bgTf.position.y,bgTf.position.z);
+                    // if (bgTf.position.x > 1) bgTf.position = new Vector3(0.95f,bgTf.position.y,bgTf.position.z);
+                    
+                    //前景移动
+                    Vector3 frontDirection = new Vector3(-v.x,  0,-v.y);//背景要反向移动
+                    frontTf.position += frontDirection * frontSpeed * Time.deltaTime;
+
+                    
+                    //角色转向
                     playerRenderer.flipX = v.x < 0;
+                    //变阵用的主角朝向
                     if (Mathf.Abs(v.x)> Mathf.Abs(v.y))//左右为主
                     {
-                        LeaderMoveDir = v.x>0?MoveDir.Right:MoveDir.Left;
+                        LeaderMoveDir = v.x > 0 ? MoveDir.Right : MoveDir.Left;
                     }
                     else //上下为主
                     {
