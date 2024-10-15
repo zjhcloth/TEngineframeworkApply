@@ -2946,7 +2946,7 @@ MonoBehaviour:
   speed: 1
   posType: 4
   followSpeed: 5
-  minDistance: 2
+  minDistance: 1.4
   separationForce: 2
   otherPartners:
   - {fileID: 823460153}

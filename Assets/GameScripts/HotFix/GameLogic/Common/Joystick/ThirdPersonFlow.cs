@@ -218,8 +218,8 @@ public class ThirdPersonFlow : MonoBehaviour
     
     
     public float followSpeed = 5f;  // 跟随速度
-    public float minDistance = 0.5f;  // 最小距离
-    public float separationForce = 0.5f;  // 分离力度
+    public float minDistance = 1.4f;  // 最小距离
+    public float separationForce = 2f;  // 分离力度
     public PartnerController[] otherPartners;
 
     void Update()

@@ -26,7 +26,7 @@ namespace zFrame.Example
         public Transform frontTf;
         public Joystick joystick;
         public float speed = 1;
-        public float bgSpeed = 0.1f;
+        public float bgSpeed = 1f;
         public float frontSpeed = 2f;
         CharacterController controller;
         private Animator animator;
