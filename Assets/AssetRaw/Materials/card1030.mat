@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: card1030
-  m_Shader: {fileID: 4800000, guid: 01bed6fd77efd1e4092faed194cb44d1, type: 3}
+  m_Shader: {fileID: 4800000, guid: 72a897c0fc4017846b5e18fa0903ff0c, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -76,7 +76,7 @@ Material:
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _SwerveX: 0
-    - _SwerveY: -0.01
+    - _SwerveY: 0
     - _UVSec: 0
     - _ZWrite: 1
     m_Colors:

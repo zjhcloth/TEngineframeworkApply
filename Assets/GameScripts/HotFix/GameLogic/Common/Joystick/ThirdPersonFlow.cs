@@ -1,6 +1,8 @@
-﻿using TEngine;
+﻿using Sirenix.Utilities;
+using TEngine;
 using UnityEngine;
 using UnityEngine.UIElements;
+using zFrame.Example;
 using zFrame.UI;
 
 public enum FlowPosType
@@ -10,7 +12,7 @@ public enum FlowPosType
     Font,
     FontDown,
     Up,
-    Leader,
+    Center,
     Down,
     BackUp,
     Back,
@@ -18,25 +20,44 @@ public enum FlowPosType
     
 }
 
+public enum MoveDir
+{
+    None,
+    Up,
+    Down,
+    Left,
+    Right,
+    
+}
+
 public class ThirdPersonFlow : MonoBehaviour
 {
     public Joystick joystick;
-    public Transform leader;
+    public ThirdPersonSolution leader;
+    public FlowPosType leaderPosType;
     private SpriteRenderer playerRenderer;
     private Animator animator;
-    CharacterController controller;
-    public float speed = 5;
+
+    private float speed = 2;
     public FlowPosType posType;
     private Vector3 targetPosition;
     private bool changeTarget = false;
+    public float moveSpeed = 2;
+    public float followSpeed = 5f;  // 跟随速度
+    public float minDistance = 1.4f;  // 最小距离
+    public float separationForce = 2f;  // 分离力度
+    public ThirdPersonFlow[] otherPartners;
     void Start()
     {
+        otherPartners = Object.FindObjectsOfType<ThirdPersonFlow>();
+        
+        GameEvent.AddEventListener<Vector3>(2, OnLeaderTargetChangeChange);
         GameEvent.AddEventListener<MoveDir>(1, OnLeaderMoveDirChange);
         playerRenderer = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
-        controller = GetComponent<CharacterController>();
         joystick.OnValueChanged.AddListener(v =>
         {
+           
             if (v.magnitude != 0)
             {
                 animator.SetBool("IsWalking", true);
@@ -49,8 +70,17 @@ public class ThirdPersonFlow : MonoBehaviour
             else
             {
                 animator.SetBool("IsWalking", false);
+                
             }
         });
+    }
+    
+    private void OnLeaderTargetChangeChange(Vector3 target)
+    {
+        changeTarget = true;
+        speed = moveSpeed;
+        Debug.Log($"----------target:{target}");
+        targetPosition = target;
     }
 
     /**
@@ -59,176 +89,1477 @@ public class ThirdPersonFlow : MonoBehaviour
     private void OnLeaderMoveDirChange(MoveDir dir)
     {
         changeTarget = true;
-        switch (posType)
-        {
-            case FlowPosType.FontUp:
-                if (dir == MoveDir.None || dir == MoveDir.Right)
-                {
-                    targetPosition = leader.position + new Vector3(1.3f, 1f, 0);
-                }
-                else if (dir == MoveDir.Left)
-                {
-                    targetPosition = leader.position + new Vector3(-1.3f, 1f, 0);
-                }
-                else if (dir == MoveDir.Up)
-                {
-                    targetPosition = leader.position + new Vector3(-1.3f, 1f, 0);
-                }
-                else if (dir == MoveDir.Down)
-                {
-                    targetPosition = leader.position + new Vector3(1.3f, -1f, 0);
-                }
-
-                break;
-            case FlowPosType.Font:
-                if (dir == MoveDir.None || dir == MoveDir.Right)
-                {
-                    targetPosition = leader.position + new Vector3(1.3f, 0, 0);
-                }
-                else if (dir == MoveDir.Left)
-                {
-                    targetPosition = leader.position + new Vector3(-1.3f, 0, 0);
-                }
-                else if (dir == MoveDir.Up)
-                {
-                    targetPosition = leader.position + new Vector3(0, 1f, 0);
-                }
-                else if (dir == MoveDir.Down)
-                {
-                    targetPosition = leader.position + new Vector3(0, -1f, 0);
-                }
-
-                break;
-            case FlowPosType.FontDown:
-                if (dir == MoveDir.None || dir == MoveDir.Right)
-                {
-                    targetPosition = leader.position + new Vector3(1.3f, -1f, 0);
-                }
-                else if (dir == MoveDir.Left)
-                {
-                    targetPosition = leader.position + new Vector3(-1.3f, -1f, 0);
-                }
-                else if (dir == MoveDir.Up)
-                {
-                    targetPosition = leader.position + new Vector3(1.3f, 1f, 0);
-                }
-                else if (dir == MoveDir.Down)
-                {
-                    targetPosition = leader.position + new Vector3(-1.3f, -1f, 0);
-                }
-
-                break;
-            case FlowPosType.Up:
-                if (dir == MoveDir.None || dir == MoveDir.Right)
-                {
-                    targetPosition = leader.position + new Vector3(0, 1f, 0);
-                }
-                else if (dir == MoveDir.Left)
-                {
-                    targetPosition = leader.position + new Vector3(0, 1f, 0);
-                }
-                else if (dir == MoveDir.Up)
-                {
-                    targetPosition = leader.position + new Vector3(-1.3f, 0, 0);
-                }
-                else if (dir == MoveDir.Down)
-                {
-                    targetPosition = leader.position + new Vector3(1.3f, 0, 0);
-                }
-
-                break;
-            case FlowPosType.Down:
-                if (dir == MoveDir.None || dir == MoveDir.Right)
-                {
-                    targetPosition = leader.position + new Vector3(0, -1f, 0);
-                }
-                else if (dir == MoveDir.Left)
-                {
-                    targetPosition = leader.position + new Vector3(0, -1f, 0);
-                }
-                else if (dir == MoveDir.Up)
-                {
-                    targetPosition = leader.position + new Vector3(1.3f, 0, 0);
-                }
-                else if (dir == MoveDir.Down)
-                {
-                    targetPosition = leader.position + new Vector3(-1.3f, 0, 0);
-                }
-
-                break;
-            case FlowPosType.BackUp:
-                if (dir == MoveDir.None || dir == MoveDir.Right)
-                {
-                    targetPosition = leader.position + new Vector3(-1.3f, 1f, 0);
-                }
-                else if (dir == MoveDir.Left)
-                {
-                    targetPosition = leader.position + new Vector3(1.3f, 1f, 0);
-                }
-                else if (dir == MoveDir.Up)
-                {
-                    targetPosition = leader.position + new Vector3(-1.3f, -1f, 0);
-                }
-                else if (dir == MoveDir.Down)
-                {
-                    targetPosition = leader.position + new Vector3(1.3f, 1f, 0);
-                }
-
-                break;
-            case FlowPosType.BackDown:
-                if (dir == MoveDir.None || dir == MoveDir.Right)
-                {
-                    targetPosition = leader.position + new Vector3(-1.3f, -1f, 0);
-                }
-                else if (dir == MoveDir.Left)
-                {
-                    targetPosition = leader.position + new Vector3(1.3f, -1f, 0);
-                }
-                else if (dir == MoveDir.Up)
-                {
-                    targetPosition = leader.position + new Vector3(1.3f, -1f, 0);
-                }
-                else if (dir == MoveDir.Down)
-                {
-                    targetPosition = leader.position + new Vector3(-1.3f, 1f, 0);
-                }
-
-                break;
-            case FlowPosType.Back:
-                if (dir == MoveDir.None || dir == MoveDir.Right)
-                {
-                    targetPosition = leader.position + new Vector3(-1.3f, 0, 0);
-                }
-                else if (dir == MoveDir.Left)
-                {
-                    targetPosition = leader.position + new Vector3(1.3f, 0, 0);
-                }
-                else if (dir == MoveDir.Up)
-                {
-                    targetPosition = leader.position + new Vector3(0, -1f, 0);
-                }
-                else if (dir == MoveDir.Down)
-                {
-                    targetPosition = leader.position + new Vector3(0, 1f, 0);
-                }
-
-                break;
-        }
+        speed = followSpeed;
+        targetPosition = leader.transform.position + GetOffSet(dir);
     }
-    
-    
-    public float followSpeed = 5f;  // 跟随速度
-    public float minDistance = 1.4f;  // 最小距离
-    public float separationForce = 2f;  // 分离力度
-    public PartnerController[] otherPartners;
+
+    /// <summary>
+    /// 默认布阵布局
+    /// 7（BackUp）,4（Up）,1（FontUp）
+    /// 8（Back）,5（Center）,2（Font）
+    /// 9（BackDown）,6（Down）,3（FontDown）
+    /// </summary>
+    /// <param name="dir"></param>
+    /// <returns></returns>
+    private Vector3 GetOffSet(MoveDir dir)
+    {
+        float offSetX = 1.3f;
+        float offSetY = 1f;
+        Vector3 offSet = new Vector3(0, 0, 0);
+        if (leaderPosType == FlowPosType.Center)
+        {
+            switch (posType)
+            {
+                case FlowPosType.FontUp://1
+                    if (dir == MoveDir.None || dir == MoveDir.Right)
+                    {
+                        offSet = new Vector3(offSetX, offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Left)
+                    {
+                        offSet = new Vector3(-offSetX, offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Up)
+                    {
+                        offSet = new Vector3(-offSetX, offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Down)
+                    {
+                        offSet = new Vector3(offSetX, -offSetY, 0);
+                    }
+                    break;
+                case FlowPosType.Font://2
+                    if (dir == MoveDir.None || dir == MoveDir.Right)
+                    {
+                        offSet = new Vector3(offSetX, 0, 0);
+                    }
+                    else if (dir == MoveDir.Left)
+                    {
+                        offSet = new Vector3(-offSetX, 0, 0);
+                    }
+                    else if (dir == MoveDir.Up)
+                    {
+                        offSet = new Vector3(-0, offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Down)
+                    {
+                        offSet = new Vector3(-0, -offSetY, 0);
+                    }
+                    break;
+                case FlowPosType.FontDown://3
+                    if (dir == MoveDir.None || dir == MoveDir.Right)
+                    {
+                        offSet = new Vector3(offSetX, -offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Left)
+                    {
+                        offSet = new Vector3(-offSetX, -offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Up)
+                    {
+                        offSet = new Vector3(offSetX, offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Down)
+                    {
+                        offSet = new Vector3(-offSetX, -offSetY, 0);
+                    }
+                    break;
+                case FlowPosType.Up://4
+                    if (dir == MoveDir.None || dir == MoveDir.Right)
+                    {
+                        offSet = new Vector3(0, offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Left)
+                    {
+                        offSet = new Vector3(0, offSetY, 0);
+                    }else if (dir == MoveDir.Up)
+                    {
+                        offSet = new Vector3(-offSetX, 0, 0);
+                    }
+                    else if (dir == MoveDir.Down)
+                    {
+                        offSet = new Vector3(offSetX, 0, 0);
+                    }
+
+                    break;
+                case FlowPosType.Center://5
+                    break;
+                case FlowPosType.Down://6
+                    if (dir == MoveDir.None || dir == MoveDir.Right)
+                    {
+                        offSet = new Vector3(0, -offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Left)
+                    {
+                        offSet = new Vector3(0, -offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Up)
+                    {
+                        offSet = new Vector3(offSetX, 0, 0);
+                    }
+                    else if (dir == MoveDir.Down)
+                    {
+                        offSet = new Vector3(-offSetX, 0, 0);
+                    }
+
+                    break;
+                case FlowPosType.BackUp://7
+                    if (dir == MoveDir.None || dir == MoveDir.Right)
+                    {
+                        offSet = new Vector3(-offSetX, offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Left)
+                    {
+                        offSet = new Vector3(offSetX, offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Up)
+                    {
+                        offSet = new Vector3(-offSetX, -offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Down)
+                    {
+                        offSet = new Vector3(offSetX, offSetY, 0);
+                    }
+
+                    break;
+                case FlowPosType.Back://8
+                    if (dir == MoveDir.None || dir == MoveDir.Right)
+                    {
+                        offSet = new Vector3(-offSetX, 0, 0);
+                    }
+                    else if (dir == MoveDir.Left)
+                    {
+                        offSet = new Vector3(offSetX, 0, 0);
+                    }
+                    else if (dir == MoveDir.Up)
+                    {
+                        offSet = new Vector3(0, -offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Down)
+                    {
+                        offSet = new Vector3(0, offSetY, 0);
+                    }
+
+                    break;
+                case FlowPosType.BackDown://9
+                    if (dir == MoveDir.None || dir == MoveDir.Right)
+                    {
+                        offSet = new Vector3(-offSetX, -offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Left)
+                    {
+                        offSet = new Vector3(offSetX, -offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Up)
+                    {
+                        offSet = new Vector3(offSetX, -offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Down)
+                    {
+                        offSet = new Vector3(-offSetX, offSetY, 0);
+                    }
+
+                    break;
+            }
+        }
+        else if (leaderPosType == FlowPosType.FontUp)
+        {
+            switch (posType)
+            {
+                case FlowPosType.FontUp: //1
+
+                    break;
+                case FlowPosType.Font: //2
+                    if (dir == MoveDir.None || dir == MoveDir.Right)
+                    {
+                        offSet = new Vector3(0, -offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Left)
+                    {
+                        offSet = new Vector3(0, -offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Up)
+                    {
+                        offSet = new Vector3(offSetX, 0, 0);
+                    }
+                    else if (dir == MoveDir.Down)
+                    {
+                        offSet = new Vector3(offSetX, 0, 0);
+                    }
+
+                    break;
+                case FlowPosType.FontDown: //3
+                    if (dir == MoveDir.None || dir == MoveDir.Right)
+                    {
+                        offSet = new Vector3(0, -2 * offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Left)
+                    {
+                        offSet = new Vector3(0, -2 * offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Up)
+                    {
+                        offSet = new Vector3(2 * offSetX, 0, 0);
+                    }
+                    else if (dir == MoveDir.Down)
+                    {
+                        offSet = new Vector3(2 * offSetX, 0, 0);
+                    }
+
+                    break;
+                case FlowPosType.Up: //4
+                    if (dir == MoveDir.None || dir == MoveDir.Right)
+                    {
+                        offSet = new Vector3(-offSetX, 0, 0);
+                    }
+                    else if (dir == MoveDir.Left)
+                    {
+                        offSet = new Vector3(offSetX, 0, 0);
+                    }
+                    else if (dir == MoveDir.Up)
+                    {
+                        offSet = new Vector3(0, -offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Down)
+                    {
+                        offSet = new Vector3(0, offSetY, 0);
+                    }
+
+                    break;
+                case FlowPosType.Center: //5
+                    if (dir == MoveDir.None || dir == MoveDir.Right)
+                    {
+                        offSet = new Vector3(-offSetX, -offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Left)
+                    {
+                        offSet = new Vector3(offSetX, -offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Up)
+                    {
+                        offSet = new Vector3(offSetX, -offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Down)
+                    {
+                        offSet = new Vector3(offSetX, offSetY, 0);
+                    }
+
+                    break;
+                case FlowPosType.Down: //6
+                    if (dir == MoveDir.None || dir == MoveDir.Right)
+                    {
+                        offSet = new Vector3(-offSetX, -2 * offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Left)
+                    {
+                        offSet = new Vector3(offSetX, -2 * offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Up)
+                    {
+                        offSet = new Vector3(2 * offSetX, -offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Down)
+                    {
+                        offSet = new Vector3(2 * offSetX, offSetY, 0);
+                    }
+
+                    break;
+                case FlowPosType.BackUp: //7
+                    if (dir == MoveDir.None || dir == MoveDir.Right)
+                    {
+                        offSet = new Vector3(-2 * offSetX, 0, 0);
+                    }
+                    else if (dir == MoveDir.Left)
+                    {
+                        offSet = new Vector3(2 * offSetX, 0, 0);
+                    }
+                    else if (dir == MoveDir.Up)
+                    {
+                        offSet = new Vector3(0, -2 * offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Down)
+                    {
+                        offSet = new Vector3(0, 2 * offSetY, 0);
+                    }
+
+                    break;
+                case FlowPosType.Back: //8
+                    if (dir == MoveDir.None || dir == MoveDir.Right)
+                    {
+                        offSet = new Vector3(-2 * offSetX, -offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Left)
+                    {
+                        offSet = new Vector3(2 * offSetX, -offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Up)
+                    {
+                        offSet = new Vector3(offSetX, -2 * offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Down)
+                    {
+                        offSet = new Vector3(offSetX, 2 * offSetY, 0);
+                    }
+
+                    break;
+                case FlowPosType.BackDown: //9
+                    if (dir == MoveDir.None || dir == MoveDir.Right)
+                    {
+                        offSet = new Vector3(-2 * offSetX, -2 * offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Left)
+                    {
+                        offSet = new Vector3(2 * offSetX, -2 * offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Up)
+                    {
+                        offSet = new Vector3(2 * offSetX, -2 * offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Down)
+                    {
+                        offSet = new Vector3(2 * offSetX, 2 * offSetY, 0);
+                    }
+
+                    break;
+            }
+        }
+        else if (leaderPosType == FlowPosType.Font)
+        {
+            switch (posType)
+            {
+                case FlowPosType.FontUp://1
+                    if (dir == MoveDir.None || dir == MoveDir.Right)
+                    {
+                        offSet = new Vector3(0, offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Left)
+                    {
+                        offSet = new Vector3(0, offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Up)
+                    {
+                        offSet = new Vector3(-offSetX, 0, 0);
+                    }
+                    else if (dir == MoveDir.Down)
+                    {
+                        offSet = new Vector3(-offSetX, 0, 0);
+                    }
+                    break;
+                case FlowPosType.Font://2
+                    
+                    break;
+                case FlowPosType.FontDown://3
+                    if (dir == MoveDir.None || dir == MoveDir.Right)
+                    {
+                        offSet = new Vector3(0, -offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Left)
+                    {
+                        offSet = new Vector3(0, -offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Up)
+                    {
+                        offSet = new Vector3(offSetX, 0, 0);
+                    }
+                    else if (dir == MoveDir.Down)
+                    {
+                        offSet = new Vector3(offSetX, 0, 0);
+                    }
+                    break;
+                case FlowPosType.Up://4
+                    if (dir == MoveDir.None || dir == MoveDir.Right)
+                    {
+                        offSet = new Vector3(-offSetX, offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Left)
+                    {
+                        offSet = new Vector3(offSetX, offSetY, 0);
+                    }else if (dir == MoveDir.Up)
+                    {
+                        offSet = new Vector3(-offSetX, -offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Down)
+                    {
+                        offSet = new Vector3(-offSetX, offSetY, 0);
+                    }
+
+                    break;
+                case FlowPosType.Center://5
+                    if (dir == MoveDir.None || dir == MoveDir.Right)
+                    {
+                        offSet = new Vector3(-offSetX, 0, 0);
+                    }
+                    else if (dir == MoveDir.Left)
+                    {
+                        offSet = new Vector3(offSetX, 0, 0);
+                    }
+                    else if (dir == MoveDir.Up)
+                    {
+                        offSet = new Vector3(0, -offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Down)
+                    {
+                        offSet = new Vector3(0, offSetY, 0);
+                    }
+                    break;
+                case FlowPosType.Down://6
+                    if (dir == MoveDir.None || dir == MoveDir.Right)
+                    {
+                        offSet = new Vector3(-offSetX, -offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Left)
+                    {
+                        offSet = new Vector3(offSetX, -offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Up)
+                    {
+                        offSet = new Vector3(offSetX, -offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Down)
+                    {
+                        offSet = new Vector3(offSetX, offSetY, 0);
+                    }
+
+                    break;
+                case FlowPosType.BackUp://7
+                    if (dir == MoveDir.None || dir == MoveDir.Right)
+                    {
+                        offSet = new Vector3(-2 * offSetX, offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Left)
+                    {
+                        offSet = new Vector3(2 * offSetX, offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Up)
+                    {
+                        offSet = new Vector3(-offSetX, -2 * offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Down)
+                    {
+                        offSet = new Vector3(-offSetX, 2 * offSetY, 0);
+                    }
+
+                    break;
+                case FlowPosType.Back://8
+                    if (dir == MoveDir.None || dir == MoveDir.Right)
+                    {
+                        offSet = new Vector3(-2 * offSetX, 0, 0);
+                    }
+                    else if (dir == MoveDir.Left)
+                    {
+                        offSet = new Vector3(2 * offSetX, 0, 0);
+                    }
+                    else if (dir == MoveDir.Up)
+                    {
+                        offSet = new Vector3(0, -2 * offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Down)
+                    {
+                        offSet = new Vector3(0, 2 * offSetY, 0);
+                    }
+
+                    break;
+                case FlowPosType.BackDown://9
+                    if (dir == MoveDir.None || dir == MoveDir.Right)
+                    {
+                        offSet = new Vector3(-2 * offSetX, -offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Left)
+                    {
+                        offSet = new Vector3(2 * offSetX, -offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Up)
+                    {
+                        offSet = new Vector3(offSetX, -2 * offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Down)
+                    {
+                        offSet = new Vector3(offSetX, 2 * offSetY, 0);
+                    }
+
+                    break;
+            }
+        }
+        else if (leaderPosType == FlowPosType.FontDown)
+        {
+            switch (posType)
+            {
+                case FlowPosType.FontUp: //1
+                    if (dir == MoveDir.None || dir == MoveDir.Right)
+                    {
+                        offSet = new Vector3(0, 2 * offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Left)
+                    {
+                        offSet = new Vector3(0, 2 * offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Up)
+                    {
+                        offSet = new Vector3(-2 * offSetX, 0, 0);
+                    }
+                    else if (dir == MoveDir.Down)
+                    {
+                        offSet = new Vector3(-2 * offSetX, 0, 0);
+                    }
+
+                    break;
+                case FlowPosType.Font: //2
+                    if (dir == MoveDir.None || dir == MoveDir.Right)
+                    {
+                        offSet = new Vector3(0, offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Left)
+                    {
+                        offSet = new Vector3(0, offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Up)
+                    {
+                        offSet = new Vector3(-offSetX, 0, 0);
+                    }
+                    else if (dir == MoveDir.Down)
+                    {
+                        offSet = new Vector3(-offSetX, 0, 0);
+                    }
+                    break;
+                case FlowPosType.FontDown: //3
+                    
+
+                    break;
+                case FlowPosType.Up: //4
+                    if (dir == MoveDir.None || dir == MoveDir.Right)
+                    {
+                        offSet = new Vector3(-offSetX, 2 * offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Left)
+                    {
+                        offSet = new Vector3(offSetX, 2 * offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Up)
+                    {
+                        offSet = new Vector3(-2 * offSetX, -offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Down)
+                    {
+                        offSet = new Vector3(-2 * offSetX, offSetY, 0);
+                    }
+
+                    break;
+                case FlowPosType.Center: //5
+                    if (dir == MoveDir.None || dir == MoveDir.Right)
+                    {
+                        offSet = new Vector3(-offSetX, offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Left)
+                    {
+                        offSet = new Vector3(offSetX, offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Up)
+                    {
+                        offSet = new Vector3(-offSetX, -offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Down)
+                    {
+                        offSet = new Vector3(-offSetX, offSetY, 0);
+                    }
+
+                    break;
+                case FlowPosType.Down: //6
+                    if (dir == MoveDir.None || dir == MoveDir.Right)
+                    {
+                        offSet = new Vector3(-offSetX, 0, 0);
+                    }
+                    else if (dir == MoveDir.Left)
+                    {
+                        offSet = new Vector3(offSetX, 0, 0);
+                    }
+                    else if (dir == MoveDir.Up)
+                    {
+                        offSet = new Vector3(0, -offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Down)
+                    {
+                        offSet = new Vector3(0, offSetY, 0);
+                    }
+
+                    break;
+                case FlowPosType.BackUp: //7
+                    if (dir == MoveDir.None || dir == MoveDir.Right)
+                    {
+                        offSet = new Vector3(-2 * offSetX, 2 * offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Left)
+                    {
+                        offSet = new Vector3(2 * offSetX, 2 * offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Up)
+                    {
+                        offSet = new Vector3(-2 * offSetX, -2 * offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Down)
+                    {
+                        offSet = new Vector3(-2 * offSetX, 2 * offSetY, 0);
+                    }
+
+                    break;
+                case FlowPosType.Back: //8
+                    if (dir == MoveDir.None || dir == MoveDir.Right)
+                    {
+                        offSet = new Vector3(-2 * offSetX, offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Left)
+                    {
+                        offSet = new Vector3(2 * offSetX, offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Up)
+                    {
+                        offSet = new Vector3(-offSetX, -2 * offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Down)
+                    {
+                        offSet = new Vector3(-offSetX, 2 * offSetY, 0);
+                    }
+
+                    break;
+                case FlowPosType.BackDown: //9
+                    if (dir == MoveDir.None || dir == MoveDir.Right)
+                    {
+                        offSet = new Vector3(-2 * offSetX, 0, 0);
+                    }
+                    else if (dir == MoveDir.Left)
+                    {
+                        offSet = new Vector3(2 * offSetX, 0, 0);
+                    }
+                    else if (dir == MoveDir.Up)
+                    {
+                        offSet = new Vector3(0, -2 * offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Down)
+                    {
+                        offSet = new Vector3(0, 2 * offSetY, 0);
+                    }
+
+                    break;
+            }
+        }
+        else if (leaderPosType == FlowPosType.Up)
+        {
+            switch (posType)
+            {
+                case FlowPosType.FontUp: //1
+                    if (dir == MoveDir.None || dir == MoveDir.Right)
+                    {
+                        offSet = new Vector3(offSetX, 0, 0);
+                    }
+                    else if (dir == MoveDir.Left)
+                    {
+                        offSet = new Vector3(-offSetX, 0, 0);
+                    }
+                    else if (dir == MoveDir.Up)
+                    {
+                        offSet = new Vector3(0, offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Down)
+                    {
+                        offSet = new Vector3(0, -offSetY, 0);
+                    }
+
+                    break;
+                case FlowPosType.Font: //2
+                    if (dir == MoveDir.None || dir == MoveDir.Right)
+                    {
+                        offSet = new Vector3(offSetX, -offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Left)
+                    {
+                        offSet = new Vector3(-offSetX, -offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Up)
+                    {
+                        offSet = new Vector3(offSetX, offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Down)
+                    {
+                        offSet = new Vector3(offSetX, -offSetY, 0);
+                    }
+                    break;
+                case FlowPosType.FontDown: //3
+                    if (dir == MoveDir.None || dir == MoveDir.Right)
+                    {
+                        offSet = new Vector3(offSetX, -2 * offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Left)
+                    {
+                        offSet = new Vector3(-offSetX, -2 * offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Up)
+                    {
+                        offSet = new Vector3(2 * offSetX, offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Down)
+                    {
+                        offSet = new Vector3(2 * offSetX, -offSetY, 0);
+                    }
+
+                    break;
+                case FlowPosType.Up: //4
+                    
+                    break;
+                case FlowPosType.Center: //5
+                    if (dir == MoveDir.None || dir == MoveDir.Right)
+                    {
+                        offSet = new Vector3(0, -offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Left)
+                    {
+                        offSet = new Vector3(0, -offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Up)
+                    {
+                        offSet = new Vector3(offSetX, 0, 0);
+                    }
+                    else if (dir == MoveDir.Down)
+                    {
+                        offSet = new Vector3(offSetX, 0, 0);
+                    }
+
+                    break;
+                case FlowPosType.Down: //6
+                    if (dir == MoveDir.None || dir == MoveDir.Right)
+                    {
+                        offSet = new Vector3(0, -2 * offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Left)
+                    {
+                        offSet = new Vector3(0, -2 * offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Up)
+                    {
+                        offSet = new Vector3(2 * offSetX, 0, 0);
+                    }
+                    else if (dir == MoveDir.Down)
+                    {
+                        offSet = new Vector3(2 * offSetX, 0, 0);
+                    }
+
+                    break;
+                case FlowPosType.BackUp: //7
+                    if (dir == MoveDir.None || dir == MoveDir.Right)
+                    {
+                        offSet = new Vector3(-offSetX, 0, 0);
+                    }
+                    else if (dir == MoveDir.Left)
+                    {
+                        offSet = new Vector3(offSetX, 0, 0);
+                    }
+                    else if (dir == MoveDir.Up)
+                    {
+                        offSet = new Vector3(0, -offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Down)
+                    {
+                        offSet = new Vector3(0, offSetY, 0);
+                    }
+
+                    break;
+                case FlowPosType.Back: //8
+                    if (dir == MoveDir.None || dir == MoveDir.Right)
+                    {
+                        offSet = new Vector3(-offSetX, -offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Left)
+                    {
+                        offSet = new Vector3(offSetX, -offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Up)
+                    {
+                        offSet = new Vector3(offSetX, -offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Down)
+                    {
+                        offSet = new Vector3(offSetX, offSetY, 0);
+                    }
+
+                    break;
+                case FlowPosType.BackDown: //9
+                    if (dir == MoveDir.None || dir == MoveDir.Right)
+                    {
+                        offSet = new Vector3(-offSetX, -2 * offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Left)
+                    {
+                        offSet = new Vector3(offSetX, -2 * offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Up)
+                    {
+                        offSet = new Vector3(2 * offSetX, -offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Down)
+                    {
+                        offSet = new Vector3(2 * offSetX, offSetY, 0);
+                    }
+
+                    break;
+            }
+        }
+        else if (leaderPosType == FlowPosType.Down)
+        {
+            switch (posType)
+            {
+                case FlowPosType.FontUp: //1
+                    if (dir == MoveDir.None || dir == MoveDir.Right)
+                    {
+                        offSet = new Vector3(offSetX, 2 * offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Left)
+                    {
+                        offSet = new Vector3(-offSetX, 2 * offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Up)
+                    {
+                        offSet = new Vector3(-2 * offSetX, offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Down)
+                    {
+                        offSet = new Vector3(2 * offSetX, -offSetY, 0);
+                    }
+
+                    break;
+                case FlowPosType.Font: //2
+                    if (dir == MoveDir.None || dir == MoveDir.Right)
+                    {
+                        offSet = new Vector3(offSetX, offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Left)
+                    {
+                        offSet = new Vector3(-offSetX, offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Up)
+                    {
+                        offSet = new Vector3(-offSetX, offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Down)
+                    {
+                        offSet = new Vector3(offSetX, -offSetY, 0);
+                    }
+
+                    break;
+                case FlowPosType.FontDown: //3
+                    if (dir == MoveDir.None || dir == MoveDir.Right)
+                    {
+                        offSet = new Vector3(offSetX, 0, 0);
+                    }
+                    else if (dir == MoveDir.Left)
+                    {
+                        offSet = new Vector3(-offSetX, 0, 0);
+                    }
+                    else if (dir == MoveDir.Up)
+                    {
+                        offSet = new Vector3(0, offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Down)
+                    {
+                        offSet = new Vector3(0, -offSetY, 0);
+                    }
+
+                    break;
+                case FlowPosType.Up: //4
+                    if (dir == MoveDir.None || dir == MoveDir.Right)
+                    {
+                        offSet = new Vector3(0, 2 * offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Left)
+                    {
+                        offSet = new Vector3(0, 2 * offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Up)
+                    {
+                        offSet = new Vector3(-2 * offSetX, 0, 0);
+                    }
+                    else if (dir == MoveDir.Down)
+                    {
+                        offSet = new Vector3(2 * offSetX, 0, 0);
+                    }
+                    break;
+                case FlowPosType.Center: //5
+                    if (dir == MoveDir.None || dir == MoveDir.Right)
+                    {
+                        offSet = new Vector3(0, offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Left)
+                    {
+                        offSet = new Vector3(0, offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Up)
+                    {
+                        offSet = new Vector3(-offSetX, 0, 0);
+                    }
+                    else if (dir == MoveDir.Down)
+                    {
+                        offSet = new Vector3(offSetX, 0, 0);
+                    }
+
+                    break;
+                case FlowPosType.Down: //6
+                    
+
+                    break;
+                case FlowPosType.BackUp: //7
+                    if (dir == MoveDir.None || dir == MoveDir.Right)
+                    {
+                        offSet = new Vector3(-offSetX, 2 * offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Left)
+                    {
+                        offSet = new Vector3(offSetX, 2 * offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Up)
+                    {
+                        offSet = new Vector3(-2 * offSetX, -offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Down)
+                    {
+                        offSet = new Vector3(2 * offSetX, offSetY, 0);
+                    }
+
+                    break;
+                case FlowPosType.Back: //8
+                    if (dir == MoveDir.None || dir == MoveDir.Right)
+                    {
+                        offSet = new Vector3(-offSetX, offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Left)
+                    {
+                        offSet = new Vector3(offSetX, offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Up)
+                    {
+                        offSet = new Vector3(-offSetX, -offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Down)
+                    {
+                        offSet = new Vector3(offSetX, offSetY, 0);
+                    }
+
+                    break;
+                case FlowPosType.BackDown: //9
+                    if (dir == MoveDir.None || dir == MoveDir.Right)
+                    {
+                        offSet = new Vector3(-offSetX, 0, 0);
+                    }
+                    else if (dir == MoveDir.Left)
+                    {
+                        offSet = new Vector3(offSetX, 0, 0);
+                    }
+                    else if (dir == MoveDir.Up)
+                    {
+                        offSet = new Vector3(0, -offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Down)
+                    {
+                        offSet = new Vector3(0, offSetY, 0);
+                    }
+
+                    break;
+            }
+        }
+        else if (leaderPosType == FlowPosType.BackUp)
+        {
+            switch (posType)
+            {
+                case FlowPosType.FontUp: //1
+                    if (dir == MoveDir.None || dir == MoveDir.Right)
+                    {
+                        offSet = new Vector3(2 * offSetX, 0, 0);
+                    }
+                    else if (dir == MoveDir.Left)
+                    {
+                        offSet = new Vector3(-2 * offSetX, 0, 0);
+                    }
+                    else if (dir == MoveDir.Up)
+                    {
+                        offSet = new Vector3(0, 2 * offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Down)
+                    {
+                        offSet = new Vector3(0, -2 * offSetY, 0);
+                    }
+
+                    break;
+                case FlowPosType.Font: //2
+                    if (dir == MoveDir.None || dir == MoveDir.Right)
+                    {
+                        offSet = new Vector3(2 * offSetX, -offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Left)
+                    {
+                        offSet = new Vector3(-2 * offSetX, -offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Up)
+                    {
+                        offSet = new Vector3(offSetX, 2 * offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Down)
+                    {
+                        offSet = new Vector3(offSetX, -2 * offSetY, 0);
+                    }
+
+                    break;
+                case FlowPosType.FontDown: //3
+                    if (dir == MoveDir.None || dir == MoveDir.Right)
+                    {
+                        offSet = new Vector3(2 * offSetX, -2 * offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Left)
+                    {
+                        offSet = new Vector3(-2 * offSetX, -2 * offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Up)
+                    {
+                        offSet = new Vector3(2 * offSetX, 2 * offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Down)
+                    {
+                        offSet = new Vector3(2 * offSetX, -2 * offSetY, 0);
+                    }
+
+                    break;
+                case FlowPosType.Up: //4
+                    if (dir == MoveDir.None || dir == MoveDir.Right)
+                    {
+                        offSet = new Vector3(offSetX, 0, 0);
+                    }
+                    else if (dir == MoveDir.Left)
+                    {
+                        offSet = new Vector3(-offSetX, 0, 0);
+                    }
+                    else if (dir == MoveDir.Up)
+                    {
+                        offSet = new Vector3(0, offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Down)
+                    {
+                        offSet = new Vector3(0, -offSetY, 0);
+                    }
+                    break;
+                case FlowPosType.Center: //5
+                    if (dir == MoveDir.None || dir == MoveDir.Right)
+                    {
+                        offSet = new Vector3(offSetX, -offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Left)
+                    {
+                        offSet = new Vector3(-offSetX, -offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Up)
+                    {
+                        offSet = new Vector3(offSetX, offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Down)
+                    {
+                        offSet = new Vector3(offSetX, -offSetY, 0);
+                    }
+
+                    break;
+                case FlowPosType.Down: //6
+                    if (dir == MoveDir.None || dir == MoveDir.Right)
+                    {
+                        offSet = new Vector3(offSetX, -2 * offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Left)
+                    {
+                        offSet = new Vector3(-offSetX, -2 * offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Up)
+                    {
+                        offSet = new Vector3(2 * offSetX, offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Down)
+                    {
+                        offSet = new Vector3(2 * offSetX, -offSetY, 0);
+                    }
+
+                    break;
+                case FlowPosType.BackUp: //7
+
+                    break;
+                case FlowPosType.Back: //8
+                    if (dir == MoveDir.None || dir == MoveDir.Right)
+                    {
+                        offSet = new Vector3(0, -offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Left)
+                    {
+                        offSet = new Vector3(0, -offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Up)
+                    {
+                        offSet = new Vector3(offSetX, 0, 0);
+                    }
+                    else if (dir == MoveDir.Down)
+                    {
+                        offSet = new Vector3(offSetX, 0, 0);
+                    }
+
+                    break;
+                case FlowPosType.BackDown: //9
+                    if (dir == MoveDir.None || dir == MoveDir.Right)
+                    {
+                        offSet = new Vector3(0, -2 * offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Left)
+                    {
+                        offSet = new Vector3(0, -2 * offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Up)
+                    {
+                        offSet = new Vector3(2 * offSetX, 0, 0);
+                    }
+                    else if (dir == MoveDir.Down)
+                    {
+                        offSet = new Vector3(2 * offSetX, 0, 0);
+                    }
+
+                    break;
+            }
+        }
+        else if (leaderPosType == FlowPosType.Back)
+        {
+            switch (posType)
+            {
+                case FlowPosType.FontUp: //1
+                    if (dir == MoveDir.None || dir == MoveDir.Right)
+                    {
+                        offSet = new Vector3(2 * offSetX, offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Left)
+                    {
+                        offSet = new Vector3(-2 * offSetX, offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Up)
+                    {
+                        offSet = new Vector3(-offSetX, 2 *offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Down)
+                    {
+                        offSet = new Vector3(-offSetX, -2 * offSetY, 0);
+                    }
+
+                    break;
+                case FlowPosType.Font: //2
+                    if (dir == MoveDir.None || dir == MoveDir.Right)
+                    {
+                        
+                        offSet = new Vector3(2 * offSetX, 0, 0);
+                    }
+                    else if (dir == MoveDir.Left)
+                    {
+                        offSet = new Vector3(-2 * offSetX, 0, 0);
+                    }
+                    else if (dir == MoveDir.Up)
+                    {
+                        offSet = new Vector3(0, 2 * offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Down)
+                    {
+                        offSet = new Vector3(0, -2 * offSetY, 0);
+                    }
+
+                    break;
+                case FlowPosType.FontDown: //3
+                    if (dir == MoveDir.None || dir == MoveDir.Right)
+                    {
+                        offSet = new Vector3(2 * offSetX, -offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Left)
+                    {
+                        offSet = new Vector3(-2 * offSetX, -offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Up)
+                    {
+                        offSet = new Vector3(offSetX, 2 * offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Down)
+                    {
+                        offSet = new Vector3(offSetX, -2 * offSetY, 0);
+                    }
+
+                    break;
+                case FlowPosType.Up: //4
+                    if (dir == MoveDir.None || dir == MoveDir.Right)
+                    {
+                        offSet = new Vector3(offSetX, offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Left)
+                    {
+                        offSet = new Vector3(-offSetX, offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Up)
+                    {
+                        offSet = new Vector3(-offSetX, offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Down)
+                    {
+                        offSet = new Vector3(-offSetX, -offSetY, 0);
+                    }
+                    break;
+                case FlowPosType.Center: //5
+                    if (dir == MoveDir.None || dir == MoveDir.Right)
+                    {
+                        offSet = new Vector3(offSetX, 0, 0);
+                    }
+                    else if (dir == MoveDir.Left)
+                    {
+                        offSet = new Vector3(-offSetX, 0, 0);
+                    }
+                    else if (dir == MoveDir.Up)
+                    {
+                        offSet = new Vector3(0, offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Down)
+                    {
+                        offSet = new Vector3(0, -offSetY, 0);
+                    }
+
+                    break;
+                case FlowPosType.Down: //6
+                    if (dir == MoveDir.None || dir == MoveDir.Right)
+                    {
+                        offSet = new Vector3(offSetX, -offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Left)
+                    {
+                        offSet = new Vector3(-offSetX, -offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Up)
+                    {
+                        offSet = new Vector3(offSetX, offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Down)
+                    {
+                        offSet = new Vector3(offSetX, -offSetY, 0);
+                    }
+
+                    break;
+                case FlowPosType.BackUp: //7
+                    if (dir == MoveDir.None || dir == MoveDir.Right)
+                    {
+                        offSet = new Vector3(0, offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Left)
+                    {
+                        offSet = new Vector3(0, offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Up)
+                    {
+                        offSet = new Vector3(-offSetX, 0, 0);
+                    }
+                    else if (dir == MoveDir.Down)
+                    {
+                        offSet = new Vector3(-offSetX, 0, 0);
+                    }
+
+                    break;
+                case FlowPosType.Back: //8
+                    
+
+                    break;
+                case FlowPosType.BackDown: //9
+                    if (dir == MoveDir.None || dir == MoveDir.Right)
+                    {
+                        offSet = new Vector3(0, -offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Left)
+                    {
+                        offSet = new Vector3(0, -offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Up)
+                    {
+                        offSet = new Vector3(offSetX, 0, 0);
+                    }
+                    else if (dir == MoveDir.Down)
+                    {
+                        offSet = new Vector3(offSetX, 0, 0);
+                    }
+
+                    break;
+            }
+        }
+        else if (leaderPosType == FlowPosType.BackDown)
+        {
+            switch (posType)
+            {
+                case FlowPosType.FontUp: //1
+                    if (dir == MoveDir.None || dir == MoveDir.Right)
+                    {
+                        offSet = new Vector3(2 * offSetX, 2 * offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Left)
+                    {
+                        offSet = new Vector3(-2 * offSetX, 2 * offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Up)
+                    {
+                        offSet = new Vector3(-2 * offSetX, 2 * offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Down)
+                    {
+                        offSet = new Vector3(-2 * offSetX, -2 * offSetY, 0);
+                    }
+
+                    break;
+                case FlowPosType.Font: //2
+                    if (dir == MoveDir.None || dir == MoveDir.Right)
+                    {
+                        offSet = new Vector3(2 * offSetX, offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Left)
+                    {
+                        offSet = new Vector3(-2 * offSetX, offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Up)
+                    {
+                        offSet = new Vector3(-offSetX, 2 * offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Down)
+                    {
+                        offSet = new Vector3(-offSetX, -2 * offSetY, 0);
+                    }
+
+                    break;
+                case FlowPosType.FontDown: //3
+                    if (dir == MoveDir.None || dir == MoveDir.Right)
+                    {
+                        offSet = new Vector3(2 * offSetX, 0, 0);
+                    }
+                    else if (dir == MoveDir.Left)
+                    {
+                        offSet = new Vector3(-2 * offSetX, 0, 0);
+                    }
+                    else if (dir == MoveDir.Up)
+                    {
+                        offSet = new Vector3(0, 2 * offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Down)
+                    {
+                        offSet = new Vector3(0, -2 * offSetY, 0);
+                    }
+
+                    break;
+                case FlowPosType.Up: //4
+                    if (dir == MoveDir.None || dir == MoveDir.Right)
+                    {
+                        offSet = new Vector3(offSetX, 2 * offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Left)
+                    {
+                        offSet = new Vector3(-offSetX, 2 * offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Up)
+                    {
+                        offSet = new Vector3(-2 * offSetX, offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Down)
+                    {
+                        offSet = new Vector3(-2 * offSetX, -offSetY, 0);
+                    }
+                    break;
+                case FlowPosType.Center: //5
+                    if (dir == MoveDir.None || dir == MoveDir.Right)
+                    {
+                        offSet = new Vector3(offSetX, offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Left)
+                    {
+                        offSet = new Vector3(-offSetX, offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Up)
+                    {
+                        offSet = new Vector3(-offSetX, offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Down)
+                    {
+                        offSet = new Vector3(-offSetX, -offSetY, 0);
+                    }
+
+                    break;
+                case FlowPosType.Down: //6
+                    if (dir == MoveDir.None || dir == MoveDir.Right)
+                    {
+                        offSet = new Vector3(offSetX, 0, 0);
+                    }
+                    else if (dir == MoveDir.Left)
+                    {
+                        offSet = new Vector3(-offSetX, 0, 0);
+                    }
+                    else if (dir == MoveDir.Up)
+                    {
+                        offSet = new Vector3(0, offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Down)
+                    {
+                        offSet = new Vector3(0, -offSetY, 0);
+                    }
+
+                    break;
+                case FlowPosType.BackUp: //7
+                    
+                    if (dir == MoveDir.None || dir == MoveDir.Right)
+                    {
+                        offSet = new Vector3(0, 2 * offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Left)
+                    {
+                        offSet = new Vector3(0, 2 * offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Up)
+                    {
+                        offSet = new Vector3(-2 * offSetX, 0, 0);
+                    }
+                    else if (dir == MoveDir.Down)
+                    {
+                        offSet = new Vector3(-2 * offSetX, 0, 0);
+                    }
+
+                    break;
+                case FlowPosType.Back: //8
+                    if (dir == MoveDir.None || dir == MoveDir.Right)
+                    {
+                        offSet = new Vector3(0, offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Left)
+                    {
+                        offSet = new Vector3(0, offSetY, 0);
+                    }
+                    else if (dir == MoveDir.Up)
+                    {
+                        offSet = new Vector3(-offSetX, 0, 0);
+                    }
+                    else if (dir == MoveDir.Down)
+                    {
+                        offSet = new Vector3(-offSetX, 0, 0);
+                    }
+
+                    break;
+                case FlowPosType.BackDown: //9
+                    
+                    break;
+            }
+        }
+
+        return offSet;
+    }
+
+
+
+
 
     void Update()
     {
         if (changeTarget)
         {
-            transform.position = Vector3.Lerp(transform.position, targetPosition, followSpeed * Time.deltaTime);
+            transform.position = Vector3.Lerp(transform.position, targetPosition, speed * Time.deltaTime);
             // 检测并进行分离调整
-            foreach (PartnerController partner in otherPartners)
+            foreach (ThirdPersonFlow partner in otherPartners)
             {
                 if (partner != this)
                 {
@@ -241,10 +1572,10 @@ public class ThirdPersonFlow : MonoBehaviour
                 }
             }
 
-            float leaderDistance = Vector2.Distance(transform.position, leader.position);
+            float leaderDistance = Vector2.Distance(transform.position, leader.transform.position);
             if (leaderDistance < minDistance)
             {
-                Vector2 separationDirection = (transform.position - leader.position).normalized;
+                Vector2 separationDirection = (transform.position - leader.transform.position).normalized;
                 transform.position += (Vector3)(separationDirection * separationForce * Time.deltaTime);
             }
         }
