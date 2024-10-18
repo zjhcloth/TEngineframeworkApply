@@ -1,17 +1,8 @@
-﻿// Copyright (c) Bian Shanghai
-// https://github.com/Bian-Sh/UniJoystick
-// Licensed under the MIT license. See the LICENSE.md file in the project root for more information.
-
-using System;
-using System.Buffers;
-using TEngine;
-
-
-
-namespace zFrame.Example
+﻿using TEngine;
+using UnityEngine;
+using zFrame.UI;
+namespace GameLogic
 {
-    using UnityEngine;
-    using zFrame.UI;
     public class ThirdPersonSolution : MonoBehaviour
     {
         public Transform bgTf;

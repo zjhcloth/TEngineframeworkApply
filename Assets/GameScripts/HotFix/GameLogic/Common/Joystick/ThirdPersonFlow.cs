@@ -1,8 +1,5 @@
-﻿using Sirenix.Utilities;
-using TEngine;
+﻿using TEngine;
 using UnityEngine;
-using UnityEngine.UIElements;
-using zFrame.Example;
 using zFrame.UI;
 
 public enum FlowPosType
@@ -29,7 +26,8 @@ public enum MoveDir
     Right,
     
 }
-
+namespace GameLogic
+{
 public class ThirdPersonFlow : MonoBehaviour
 {
     public Joystick joystick;
@@ -1582,4 +1580,4 @@ public class ThirdPersonFlow : MonoBehaviour
     }
     
 }
-
+}

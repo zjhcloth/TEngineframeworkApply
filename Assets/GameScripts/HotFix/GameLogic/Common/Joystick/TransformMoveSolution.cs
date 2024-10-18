@@ -1,10 +1,8 @@
-﻿// Copyright (c) Bian Shanghai
-// https://github.com/Bian-Sh/UniJoystick
-// Licensed under the MIT license. See the LICENSE.md file in the project root for more information.
-namespace zFrame.Example
+﻿using UnityEngine;
+using zFrame.UI;
+
+namespace GameLogic
 {
-    using UnityEngine;
-    using zFrame.UI;
     public class TransformMoveSolution : MonoBehaviour
     {
         public Joystick joystick;
