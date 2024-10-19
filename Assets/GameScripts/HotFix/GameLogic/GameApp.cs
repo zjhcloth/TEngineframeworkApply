@@ -4,6 +4,7 @@ using Cysharp.Threading.Tasks;
 using GameBase;
 using GameLogic;
 using TEngine;
+using UnityEngine;
 
 /// <summary>
 /// 游戏App。
@@ -21,6 +22,7 @@ public partial class GameApp:Singleton<GameApp>
         _hotfixAssembly = (List<Assembly>)objects[0];
         Log.Warning("======= 看到此条日志代表你成功运行了热更新代码 =======");
         Log.Warning("======= Entrance GameApp =======");
+
         Instance.Active();
         Instance.Start();
         Utility.Unity.AddUpdateListener(Instance.Update);
@@ -77,11 +79,24 @@ public partial class GameApp:Singleton<GameApp>
             logic.OnStart();
         }
 
-        TryLanguage().Forget();
-      
+        //预热变体
+        WarmUpShaderVariant();
+        //多语言加载
+        LoadLanguage().Forget();
     }
 
-    private async UniTask TryLanguage()
+    //预热变体--优化运行时的帧率
+    public async void WarmUpShaderVariant()
+    {
+        //预热变体
+        ShaderVariantCollection result = await GameModule.Resource.LoadAssetAsync<ShaderVariantCollection>("MyShaderVariants");
+        result.WarmUp();
+        // Debug.Log("预热变体-----------------------");
+    }
+    /// <summary>
+    /// 加载多语言模块
+    /// </summary>
+    private async UniTask LoadLanguage()
     {
         await GameModule.Localization.LoadLanguageTotalAsset("Localization");
         GameModule.Localization.SetLanguage(Language.English);

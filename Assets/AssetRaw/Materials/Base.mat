@@ -30,6 +30,6 @@ Material:
     m_Ints: []
     m_Floats:
     - _SwerveX: 0
-    - _SwerveY: -0.08
+    - _SwerveY: -0.2
     m_Colors: []
   m_BuildTextureStacks: []

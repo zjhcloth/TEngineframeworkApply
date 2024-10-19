@@ -6,7 +6,9 @@
 //======================================================
 using System.Collections;
 using System.Collections.Generic;
+using TEngine;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace GameLogic
 {
@@ -15,6 +17,16 @@ namespace GameLogic
     /// </summary>
     public class SceneManager
     {
-        
+        /// <summary>
+        /// 进入主场景
+        /// </summary>
+        public static void EnterMain()
+        {
+            //资源清理
+            //TODO
+            var sence = GameModule.Scene.LoadScene("FubenCenter");
+            GameModule.UI.ShowUIAsync<UILoading>(sence);
+            //GameModule.Scene.LoadScene("FubenCenter");
+        }
     }
 }

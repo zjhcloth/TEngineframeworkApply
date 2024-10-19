@@ -69,7 +69,7 @@ namespace GameLogic
 			m_textStartGame.text = "开始游戏";
 			//事件发送测试
 			GameEvent.Get<IUIMenu>().onSettingChange("开始游戏");
-			GameModule.Scene.LoadScene("Test");
+			SceneManager.EnterMain();
 			Close();
 		}
 		private void OnClickSettingBtn()
