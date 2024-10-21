@@ -3,7 +3,7 @@ Shader "CRLuo/CRLuo_Transparent"
     Properties
     {
         _MainTex ("颜色纹理", 2D) = "white" {}
-		_SwerveX("左右弯曲程度", Range(-0.003,0.003)) = 0.0
+		//_SwerveX("左右弯曲程度", Range(-0.003,0.003)) = 0.0
 		_SwerveY("上下弯曲程度", Range(-5,5)) = 0.0
     }
     SubShader
@@ -59,7 +59,7 @@ Shader "CRLuo/CRLuo_Transparent"
 				//左右左右坐标作为弯道 
 				//依据Z坐标求平方获取弯曲曲线，越远离世界坐标原点，弯曲效果越明显。
 				//最后乘以左右弯道弯曲方向，和弯曲强度
-				WordPos.x +=pow(WordPos.z, 2)*_SwerveX;
+				//WordPos.x +=pow(WordPos.z, 2)*_SwerveX;
 				//方法与上面相同，改变Y轴，获得上下坡效果
 				WordPos.y += pow(WordPos.z, 2)*_SwerveY;
 

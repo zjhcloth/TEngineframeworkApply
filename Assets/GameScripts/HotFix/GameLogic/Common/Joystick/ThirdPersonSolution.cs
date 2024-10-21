@@ -13,10 +13,12 @@ namespace GameLogic
         public float frontSpeed = 2f;
         CharacterController controller;
         private Animator animator;
-        private SpriteRenderer playerRenderer;
+        public SpriteRenderer playerRenderer;
         private MoveDir moveDir = MoveDir.None;
-        private bool autoWalk = false;
+        private bool userCtrl = false;// 是否摇杆控制
         private Vector3 targetPosition;
+        public MonserCtrl monster;
+        
         public Vector3 TargetPosition
         {
             set
@@ -49,12 +51,13 @@ namespace GameLogic
             animator = GetComponent<Animator>();
             controller = GetComponent<CharacterController>();
             playerRenderer = GetComponent<SpriteRenderer>();
+            monster = Object.FindObjectsOfType<MonserCtrl>()[0];
             joystick.OnValueChanged.AddListener(v =>
             {
                 if (v.magnitude != 0)
                 {
                     speed = 2;
-                    autoWalk = false;
+                    userCtrl = true;
                     animator.SetBool("IsWalking", true);
                     //角色不用移动，移动背景就好了
                     Vector3 direction = new Vector3(v.x, 0, v.y);
@@ -80,6 +83,7 @@ namespace GameLogic
 
                     //角色转向
                     playerRenderer.flipX = v.x < 0;
+                    flipX = playerRenderer.flipX;
                     //变阵用的主角朝向
                     if (Mathf.Abs(v.x) > Mathf.Abs(v.y))//左右为主
                     {
@@ -92,24 +96,57 @@ namespace GameLogic
                 }
                 else
                 {
+                    userCtrl = false;
                     animator.SetBool("IsWalking", false);
-                    autoWalk = true;
-                    TargetPosition = new Vector3(-4,-2,-7);
+                    LeaderMoveDir = MoveDir.None;
+                    //autoWalk = true;
+                    //TargetPosition = new Vector3(-4,-2,-7);
                 }
             });
         }
         
-        
-        
-
+        public bool flipX = false;  // 是否反转
+        public bool isMoving = true;  // 是否正在移动
+        public float stopDistance = 3f; // 停止移动的距离
         void Update()
         {
-            if (autoWalk)
+            // if (!userCtrl)
+            // {
+            //     transform.position = Vector3.Lerp(transform.position, targetPosition, speed * Time.deltaTime);
+            //     
+            // }
+            if (!userCtrl)
             {
-                transform.position = Vector3.Lerp(transform.position, targetPosition, speed * Time.deltaTime);
-                
+                if (isMoving)
+                {
+                    playerRenderer.flipX = monster.transform.position.x < transform.position.x;
+                    // 计算两个对象之间的距离
+                    float distance = Vector2.Distance(transform.position, monster.transform.position);
+
+                    // 当距离小于等于停止距离时，停止移动
+                    if (distance <= stopDistance)
+                    {
+                        isMoving = false; // 停止移动
+                        return;           // 不再更新位置
+                    }
+                    animator.SetBool("IsWalking", true);
+                    // 移动物体朝向目标方向
+                    MoveTowardsTarget();
+                }
+                else
+                {
+                    playerRenderer.flipX = monster.transform.position.x < transform.position.x;
+                    animator.SetBool("IsWalking", false);
+                    float distance = Vector2.Distance(transform.position, monster.transform.position);
+                    if(distance > stopDistance)
+                    {
+                        isMoving = true; // 停止移动
+                    }
+                }
             }
-                
+
+            
+            
             // // 检测输入并播放不同的动画
             // if (Input.GetKey(KeyCode.W))
             // {
@@ -121,6 +158,15 @@ namespace GameLogic
             //     // 停止行走动画，播放待机动画
             //     animator.SetBool("IsWalking", false);
             // }
+        }
+        
+        void MoveTowardsTarget()
+        {
+            // 计算从当前对象到目标的方向
+            Vector3 direction = (monster.transform.position - transform.position).normalized;
+            playerRenderer.flipX = direction.x < 0;
+            // 更新物体位置
+            transform.position = (Vector3)transform.position + direction * speed * Time.deltaTime;
         }
         
     }

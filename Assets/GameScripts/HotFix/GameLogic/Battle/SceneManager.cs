@@ -28,5 +28,16 @@ namespace GameLogic
             GameModule.UI.ShowUIAsync<UILoading>(sence);
             //GameModule.Scene.LoadScene("FubenCenter");
         }
+        
+        public static void EnterBattle()
+        {
+            //资源清理
+            BaseBattleData.Clear();
+            //TODO
+            var sence = GameModule.Scene.LoadScene("FubenCenter");
+            GameModule.UI.ShowUIAsync<UILoading>(sence);
+            BaseBattleData.mPlayerDataList.Add(1,new PlayerProperty(1));
+            BaseBattleData.mEnemyDataList.Add(1,new MonsterProperty(1));
+        }
     }
 }
