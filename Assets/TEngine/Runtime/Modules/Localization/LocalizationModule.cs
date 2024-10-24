@@ -242,7 +242,7 @@ namespace TEngine
         /// <returns></returns>
         public bool SetLanguage(string language, bool load = false)
         {
-            Debug.Log($"LocalizationManager.CurrentLanguage:{LocalizationManager.CurrentLanguage}  language:{language}");
+            Log.Debug($"LocalizationManager.CurrentLanguage:{LocalizationManager.CurrentLanguage}  language:{language}");
             if (!CheckLanguage(language))
             {
                 if (load)
@@ -260,7 +260,7 @@ namespace TEngine
                 return true;
             }
 
-            Log.Info($"设置当前语言 = {language}");
+            //Log.Info($"设置当前语言 = {language}");
             LocalizationManager.CurrentLanguage = language;
             m_CurrentLanguage = language;
             return true;

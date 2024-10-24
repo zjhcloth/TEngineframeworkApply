@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 6947265473973332004}
   - component: {fileID: 5137470551543018001}
   - component: {fileID: 386126228013472636}
+  - component: {fileID: 5830361469857890527}
   m_Layer: 5
   m_HasEditorInfo: 1
   m_Name: card
@@ -54,7 +55,7 @@ CharacterController:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Height: 1
   m_Radius: 0.36
@@ -70,7 +71,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 284956896510886775}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4d01c5f2ab593a546bf7081c533655a3, type: 3}
   m_Name: 
@@ -81,6 +82,26 @@ MonoBehaviour:
   speed: 1
   bgSpeed: 1
   frontSpeed: 2
+  playerRenderer: {fileID: 0}
+  monster: {fileID: 0}
+  flipX: 0
+  isMoving: 1
+  stopDistance: 3
+--- !u!114 &5830361469857890527
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 284956896510886775}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4589db6fb1f0b444686b5e54e6fe796c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mAnimator: {fileID: 7808832545189881780}
+  mLoc: 0
+  mAnimmator: {fileID: 0}
 --- !u!1 &839970563024269677
 GameObject:
   m_ObjectHideFlags: 0
@@ -109,7 +130,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0.4973526, y: 0, z: 0, w: 0.8675486}
   m_LocalPosition: {x: 0, y: -0.58, z: 0}
-  m_LocalScale: {x: 0.395, y: 0.2858, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6947265473973332004}
@@ -158,7 +179,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
+  m_Sprite: {fileID: 21300000, guid: d5984eeb412cce84da53e9772a94a2c1, type: 3}
   m_Color: {r: 0, g: 0, b: 0, a: 0.49803922}
   m_FlipX: 0
   m_FlipY: 0
@@ -247,7 +268,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 0ad1e8fed3dff154ca2135be2dfe7491, type: 3}
+  m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -255,7 +276,7 @@ SpriteRenderer:
   m_Size: {x: 0.72, y: 1.02}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!95 &7808832545189881780

@@ -110,16 +110,16 @@ namespace GameLogic
         public float stopDistance = 3f; // 停止移动的距离
         void Update()
         {
-            // if (!userCtrl)
-            // {
-            //     transform.position = Vector3.Lerp(transform.position, targetPosition, speed * Time.deltaTime);
-            //     
-            // }
+            if (!userCtrl)
+            {
+                transform.position = Vector3.Lerp(transform.position, targetPosition, speed * Time.deltaTime);
+                
+            }
             if (!userCtrl)
             {
                 if (isMoving)
                 {
-                    playerRenderer.flipX = monster.transform.position.x < transform.position.x;
+                    playerRenderer.flipX = monster?.transform.position.x < transform.position.x;
                     // 计算两个对象之间的距离
                     float distance = Vector2.Distance(transform.position, monster.transform.position);
 

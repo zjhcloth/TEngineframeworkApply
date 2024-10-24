@@ -41,7 +41,7 @@ namespace GameLogic
 
 		private void OnSettingChange(string value)
 		{
-			Debug.Log("-----------------"+value);
+			//Log.Debug("-----------------"+value);
 			//播放背景音乐测试
 			//GameModule.Audio.Stop(AudioType.Sound, true);
 			//GameModule.Audio.Play(AudioType.Sound, "bgm");
@@ -52,7 +52,7 @@ namespace GameLogic
 		private void OnClickChangeLanguageBtn()
 		{
 			Language currLanguage = GameModule.Localization.Language;
-			Debug.Log(GameModule.Localization.Language);
+			//Log.Debug(GameModule.Localization.Language);
 			if (Language.English == currLanguage)
 			{
 				GameModule.Localization.SetLanguage(Language.ChineseSimplified);
@@ -69,7 +69,7 @@ namespace GameLogic
 			m_textStartGame.text = "开始游戏";
 			//事件发送测试
 			GameEvent.Get<IUIMenu>().onSettingChange("开始游戏");
-			SceneManager.EnterMain();
+			SceneManager.EnterBattle();
 			Close();
 		}
 		private void OnClickSettingBtn()

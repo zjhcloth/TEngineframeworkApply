@@ -144,8 +144,8 @@ namespace TEngine
         private void Start()
         {
             double timeStamp = ((DateTime.Now.ToUniversalTime().Ticks - 621355968000000000) / 10000);
-            Debug.Log("启动后的时间：" + timeStamp);
-            Debug.Log("启动消耗时间：" +  (timeStamp - ChuhaoBridge.ChuhaoBridge.Instance.GetStartTime()));
+            //Log.Debug("启动后的时间：" + timeStamp);
+            Log.Debug("启动消耗时间：" +  (timeStamp - ChuhaoBridge.ChuhaoBridge.Instance.GetStartTime()));
             
             Log.Info("GameModule Active");
             

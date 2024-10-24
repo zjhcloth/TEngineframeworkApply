@@ -32,12 +32,15 @@ namespace GameLogic
         public static void EnterBattle()
         {
             //资源清理
-            BaseBattleData.Clear();
+            BaseFightData.Clear();
+            BaseFightData.mFightModeType = typeof(FrameModeManager);
             //TODO
-            var sence = GameModule.Scene.LoadScene("FubenCenter");
+            var sence = GameModule.Scene.LoadScene("City");
             GameModule.UI.ShowUIAsync<UILoading>(sence);
-            BaseBattleData.mPlayerDataList.Add(1,new PlayerProperty(1));
-            BaseBattleData.mEnemyDataList.Add(1,new MonsterProperty(1));
+            CmdManager.Instance.InitData();
+            //添加角色和怪物
+            // BaseFightData.mPlayerDataList.Add(1,new PlayerProperty(1));
+            //BaseFightData.mEnemyDataList.Add(1,new MonsterPlayerProperty(1));
         }
     }
 }

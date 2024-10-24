@@ -960,6 +960,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 031c29e9f719f8c4399cd509f3769e1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mCurMaxFrame: -1
 --- !u!1 &760422902
 GameObject:
   m_ObjectHideFlags: 0
