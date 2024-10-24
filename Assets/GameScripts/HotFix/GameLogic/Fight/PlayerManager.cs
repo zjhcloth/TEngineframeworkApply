@@ -59,7 +59,7 @@ public class PlayerManager
         pro.SkillHurtDef = 100; //技能伤害抗性
         pro.HurtDur = 100; //持续伤害
         pro.HurtDurDef = 100; //持续伤害抗性
-        pro.AtkRange = 1;//攻击距离
+        pro.AtkRange = 3;//攻击距离
         pro.Position = new Vector3(-3, 7, -10);
         pro.MoveStatus = EnumUtil.MoveStatus.移动;
         pro.Buffs = new Dictionary<EnumUtil.BuffType, Buff>();
@@ -108,7 +108,7 @@ public class PlayerManager
         pro.SkillHurtDef = 100; //技能伤害抗性
         pro.HurtDur = 100; //持续伤害
         pro.HurtDurDef = 100; //持续伤害抗性
-        pro.AtkRange = 0.1f;//攻击距离
+        pro.AtkRange = 2f;//攻击距离
         pro.Position = new Vector3(3, 7, -10);
         pro.MoveStatus = EnumUtil.MoveStatus.移动;
         pro.Buffs = new Dictionary<EnumUtil.BuffType, Buff>();

@@ -235,7 +235,7 @@ namespace GameLogic
                     
                     float x = pro.Position.x - pro.Target.Position.x;
                     float z = pro.Position.z - pro.Target.Position.z;
-                    pro.Position += dir * pro.Speed;
+                    pro.Position += dir * pro.StimeSpeed;
                     Debug.Log($" 当前帧{mCurMaxFrame}-----{GetPropertyStr(pro)}  移动 从 {lastPos}  移动到{pro.Position}  dis：{(x * x + z * z)}   range：{pro.AtkRange * pro.AtkRange}");
                     if (CollisionCheck.CanAttack(pro.Position, pro.Target.Position, pro.AtkRange))
                     {

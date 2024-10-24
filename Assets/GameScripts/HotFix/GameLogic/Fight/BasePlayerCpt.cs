@@ -12,6 +12,8 @@ namespace GameLogic
         {
             mLoc = loc;
             MBasePlayerPro = BaseFightData.GetPlayerPro<BasePlayerProperty>(loc);
+            if (MBasePlayerPro == null)//敌方
+                MBasePlayerPro = BaseFightData.GetEnemyPlayerPro<BasePlayerProperty>(loc);
             if (MBasePlayerPro == null)
                 return;
             isRemoveEvent = false;

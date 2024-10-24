@@ -7,6 +7,7 @@ namespace GameLogic
     public class BasePlayerMono : BaseMono
     {
         public Animator mAnimator;
+        public SpriteRenderer mRenderer; 
         public int mLoc;
     }
 }

@@ -27,9 +27,9 @@ namespace GameLogic
                 mPro = BaseFightData.GetEnemyPlayerPro<PlayerProperty>(loc);
             Mono = obj.GetComponent<FightPlayerMono>();
             mTransform = obj.transform;
-            //Debug.Log(loc + " Init----mPro");
             Mono.transform.position = mPro.Position;
-            Mono.transform.localScale = new Vector3(2, 2, 2);
+            Debug.Log(loc + " Init----mPro" + mPro.Position);
+            //Mono.transform.localScale = new Vector3(2, 2, 2);
             Mono.mLoc = loc;
 
             AnimatorController ctrl =
@@ -56,10 +56,9 @@ namespace GameLogic
         [PlayerMessenger(PlayerProperty.UpdatePlayerProVector, PlayerProEnumKey.position)]
         protected void DoMove(int loc, string key, Vector3 data)
         {
-            Debug.Log($"{mPro.Loc}-----------{data}-------{loc}");
             if(loc != mPro.Loc)return;
-            Debug.Log($"{mPro.Loc}-----------{data}");
             mTargetMovePostion = data;
+            Mono.mRenderer.flipX = mTransform.position.x > mTargetMovePostion.x;
         }
         
 
@@ -118,8 +117,10 @@ namespace GameLogic
 
         public void DoUpdate()
         {
-            mTransform.position = mTargetMovePostion;
-            //mTransform.position = Vector3.Lerp(mTransform.position, mTargetMovePostion, 0.1f * Time.deltaTime);
+            //mTransform.position = mTargetMovePostion;
+            Debug.Log(mPro.Loc + "----------------" + mTransform.position);
+            mTransform.position = Vector3.Lerp(mTransform.position, mTargetMovePostion, 1);
+            
         }
 
         public override void Clear()
