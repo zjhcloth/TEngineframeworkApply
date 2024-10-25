@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using zFrame.UI;
+using Random = UnityEngine.Random;
 
 
 namespace GameLogic

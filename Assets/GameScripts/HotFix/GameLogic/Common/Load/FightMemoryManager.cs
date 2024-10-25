@@ -100,6 +100,7 @@ namespace GameLogic
         {
             mAssets.Add("card");
             mAssets.Add("Joystick");
+            mAssets.Add("PopupNumber");
             await LoadBattleResAsync();
         }
 
