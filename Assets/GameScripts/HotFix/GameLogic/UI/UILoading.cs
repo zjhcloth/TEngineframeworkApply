@@ -49,8 +49,8 @@ namespace GameLogic
 
 		private async void OnClose()
 		{
-			//2秒后关闭
-			//await UniTask.Delay(2000);
+			//5秒后关闭
+			//await UniTask.Delay(5000);
 			Close();
 		}
 

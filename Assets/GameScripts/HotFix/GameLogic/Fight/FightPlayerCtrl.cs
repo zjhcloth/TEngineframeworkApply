@@ -119,6 +119,11 @@ namespace GameLogic
             //mTransform.position = mTargetMovePostion;
             //Debug.Log(mPro.Loc + "----------------" + mTransform.position);
             mTransform.position = Vector3.Lerp(mTransform.position, mTargetMovePostion, 1);
+            if (Mono.mLoc > 1)//敌人
+            {
+                BasePlayerProperty target = BaseFightData.GetPlayerPro<BasePlayerProperty>(1);
+                Mono.mRenderer.flipX = mTransform.position.x > target.Position.x;
+            }
             
         }
 

@@ -234,27 +234,31 @@ namespace GameLogic
                     return;
                 }
             }
-            if (pro.Target != null && pro.MoveStatus == EnumUtil.MoveStatus.移动)
+            if (pro.Target != null)
             {
-                Vector3 lastPos = pro.Position;
-                if (pro.IsLeader && GameCache.UserCtrlMove)
+                if (pro.MoveStatus == EnumUtil.MoveStatus.移动)
                 {
-                    pro.Position += pro.MoveDir * pro.StimeSpeed;
-                }
-                else
-                {
+                    Vector3 lastPos = pro.Position;
                     Vector3 dir = (pro.Target.Position - pro.Position).normalized;
-                    
                     float x = pro.Position.x - pro.Target.Position.x;
                     float z = pro.Position.z - pro.Target.Position.z;
                     pro.Position += dir * pro.StimeSpeed;
-                    Debug.Log($" 当前帧{mCurMaxFrame}-----{GetPropertyStr(pro)}  移动 从 {lastPos}  移动到{pro.Position}  dis：{(x * x + z * z)}   range：{pro.AtkRange * pro.AtkRange}");
+                    Debug.Log(
+                        $" 当前帧{mCurMaxFrame}-----{GetPropertyStr(pro)}  移动 从 {lastPos}  移动到{pro.Position}  dis：{(x * x + z * z)}   range：{pro.AtkRange * pro.AtkRange}");
                     if (CollisionCheck.CanAttack(pro.Position, pro.Target.Position, pro.AtkRange))
                     {
                         pro.MoveStatus = EnumUtil.MoveStatus.攻击;
                         Debug.Log($" 当前帧{mCurMaxFrame}-----{GetPropertyStr(pro)}  移动 状态改为 攻击");
                     }
-                    
+
+                }
+                else//判断是否超过攻击距离，继续追击
+                {
+                    if (!CollisionCheck.CanAttack(pro.Position, pro.Target.Position, pro.AtkRange))
+                    {
+                        pro.MoveStatus = EnumUtil.MoveStatus.移动;
+                        Debug.Log($" 当前帧{mCurMaxFrame}-----{GetPropertyStr(pro)}  攻击 状态改为 移动");
+                    }
                 }
             }
         }
