@@ -12,6 +12,7 @@ namespace GameLogic
 {
        public class BaseFightData
        {
+              public static int mLeaderLoc;//队长下标
               public static SRandom mRandom;//本次战斗随机数
               private static long mRandSeed;//随机种子
               public static Type mFightModeType;

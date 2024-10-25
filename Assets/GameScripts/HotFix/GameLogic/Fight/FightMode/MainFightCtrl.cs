@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using zFrame.UI;
 
 
 namespace GameLogic
@@ -9,7 +10,7 @@ namespace GameLogic
         public static MainFightCtrl Instance = null;
         public IBaseMode iModeManager;
         private bool start = false;
-
+        public Joystick joystick;
         /// <summary>
         /// 主摄像机
         /// </summary>
@@ -24,6 +25,19 @@ namespace GameLogic
         {
             Instance = this;
             gameObject.AddComponent<FightMemoryManager>();
+        }
+
+        private void Start()
+        {
+            joystick.OnValueChanged.AddListener(v =>
+            {
+                Vector2 SendVector = Vector2.zero;
+                if (v.magnitude != 0)
+                {
+                    SendVector = v;
+                }
+                CmdManager.Instance.CmdMove(SendVector);
+            });
         }
 
         public static void StartFight()

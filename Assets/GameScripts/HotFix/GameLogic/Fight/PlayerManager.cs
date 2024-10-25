@@ -22,6 +22,7 @@ public class PlayerManager
     {
         ProcessAddPlayer(1);
         ProcessAddPlayerEnemy(2);
+        BaseFightData.mLeaderLoc = 1;
     }
 
     public static PlayerProperty ProcessAddPlayer(int loc)

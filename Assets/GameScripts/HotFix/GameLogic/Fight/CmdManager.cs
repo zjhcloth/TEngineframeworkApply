@@ -147,7 +147,6 @@ namespace GameLogic
             {
                 //TODO buff处理
             }
-            
         }
 
         private void UpdateSkill(BasePlayerProperty pro)
@@ -222,6 +221,19 @@ namespace GameLogic
             {
                 return;//这些buff状态无法移动
             }
+            //.主角考虑控制移动
+            if (BaseFightData.mLeaderLoc == pro.Loc)
+            {
+                if (mCurMove != Vector2.zero)
+                {
+                    pro.MoveStatus = EnumUtil.MoveStatus.移动;
+
+                    Vector3 dir = new Vector3(mCurMove.x, mCurMove.y, 0).normalized;
+                    Debug.Log($"dir:{dir}-----mCurMove:{mCurMove}");
+                    pro.Position += dir * pro.StimeSpeed;
+                    return;
+                }
+            }
             if (pro.Target != null && pro.MoveStatus == EnumUtil.MoveStatus.移动)
             {
                 Vector3 lastPos = pro.Position;
@@ -278,7 +290,7 @@ namespace GameLogic
         {
             if (mCurMaxFrame < 0)
                 return;
-            mCurMove = move;
+            mCurMove = move.normalized;
         }
 
         public void Clear()

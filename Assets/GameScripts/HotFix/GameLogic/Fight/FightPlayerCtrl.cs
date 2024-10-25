@@ -10,7 +10,6 @@ namespace GameLogic
     {
         protected PlayerProperty mPro;
         protected GameObject mObj;
-
         protected PlayerAnimator mAnimatorCtr;
         protected Vector3 mTargetMovePostion;
         private Transform mTransform;
@@ -118,7 +117,7 @@ namespace GameLogic
         public void DoUpdate()
         {
             //mTransform.position = mTargetMovePostion;
-            Debug.Log(mPro.Loc + "----------------" + mTransform.position);
+            //Debug.Log(mPro.Loc + "----------------" + mTransform.position);
             mTransform.position = Vector3.Lerp(mTransform.position, mTargetMovePostion, 1);
             
         }

@@ -235,7 +235,7 @@ namespace GameLogic
                 _position = value; 
                 if (change && UpdatePlayerProVectorEvent != null)
                 {
-                    Debug.Log($"------------{_loc}---UpdatePlayerProVectorEvent--{value}");
+                    //Debug.Log($"------------{_loc}---UpdatePlayerProVectorEvent--{value}");
                     UpdatePlayerProVectorEvent.Broadcast(_loc, PlayerProEnumKey.position, value, PlayerProEnumKey.position);
                 }
             }

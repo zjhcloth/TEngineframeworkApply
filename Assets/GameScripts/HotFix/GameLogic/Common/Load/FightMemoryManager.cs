@@ -12,6 +12,7 @@ using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
 using TEngine;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace GameLogic
 {
@@ -55,6 +56,26 @@ namespace GameLogic
             await LoadResByGameMode();
             PlayerManager.CreatePlayer();
             await UniTask.DelayFrame(1);
+            // GameObject go = Instance.Allocate("Joystick", false);
+            //
+            // // 创建Canvas
+            // Canvas canvas = new GameObject("Canvas").AddComponent<Canvas>();
+            // canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+            //
+            // // 创建CanvasScaler
+            // CanvasScaler canvasScaler = new GameObject("CanvasScaler").AddComponent<CanvasScaler>();
+            // canvasScaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+            // canvasScaler.referenceResolution = new Vector2(1920f, 1080f);
+            // canvasScaler.screenMatchMode = CanvasScaler.ScreenMatchMode.MatchWidthOrHeight;
+            //
+            // // 创建GraphicRaycaster
+            // GraphicRaycaster graphicRaycaster = new GameObject("GraphicRaycaster").AddComponent<GraphicRaycaster>();
+            //
+            // // 设置层级关系
+            // canvasScaler.transform.SetParent(canvas.transform);
+            // graphicRaycaster.transform.SetParent(canvas.transform);
+            //
+            // go.transform.parent = canvas.transform;
             MainFightCtrl.StartFight();
 
         }
@@ -78,6 +99,7 @@ namespace GameLogic
         public async UniTask LoadResByGameMode()
         {
             mAssets.Add("card");
+            mAssets.Add("Joystick");
             await LoadBattleResAsync();
         }
 
