@@ -35,7 +35,7 @@ namespace GameLogic
             BaseFightData.Clear();
             BaseFightData.mFightModeType = typeof(FrameModeManager);
             //TODO
-            var sence = GameModule.Scene.LoadScene("City");
+            var sence = GameModule.Scene.LoadScene("City1");
             GameModule.UI.ShowUIAsync<UILoading>(sence);
             CmdManager.Instance.InitData();
             //添加角色和怪物
