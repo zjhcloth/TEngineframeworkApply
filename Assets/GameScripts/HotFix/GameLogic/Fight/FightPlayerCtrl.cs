@@ -1,6 +1,7 @@
 using Cysharp.Threading.Tasks;
 using DamageNumbersPro;
 using DamageNumbersPro.Demo;
+using Spine;
 using TEngine;
 using UnityEditor.Animations;
 using UnityEngine;
@@ -10,6 +11,14 @@ namespace GameLogic
 {
     public class FightPlayerCtrl : BasePlayerCpt<BaseCptMono>, IBasePlayer
     {
+        private const string IsRun = "IsRun";
+        private const string IsIdle = "IsIdle";
+        private const string IsAtk = "IsAtk";
+        private const string IsDie = "IsDie";
+        private const string IsHit = "IsHit";
+        private const string IsSkill = "IsSkill";
+        private const string IsVertigo = "IsVertigo";
+        
         public DamageNumber popupPrefab;
         protected PlayerProperty mPro;
         protected GameObject mObj;
@@ -34,15 +43,16 @@ namespace GameLogic
             //Mono.transform.localScale = new Vector3(2, 2, 2);
             Mono.mLoc = loc;
 
-            AnimatorController ctrl =
-                await GameModule.Resource.LoadAssetAsync<AnimatorController>(loc == 2
-                    ? "ctrl_card2021"
-                    : "ctrl_card1034");
-            Mono.mAnimator.runtimeAnimatorController = ctrl;
+            // AnimatorController ctrl =
+            //     await GameModule.Resource.LoadAssetAsync<AnimatorController>(loc == 2
+            //         ? "ctrl_card2021"
+            //         : "ctrl_card1034");
+            // Mono.mAnimator.runtimeAnimatorController = ctrl;
             GameObject go = await GameModule.Resource.LoadAssetAsync<GameObject>("PopupNumber");
             popupPrefab = go.GetComponent<DamageNumber>();
             mAnimatorCtr = new PlayerAnimator(Mono.mAnimator);
-            mAnimatorCtr.SetBool("IsWalking", true);
+            mAnimatorCtr.SetBool(IsRun, true);
+            Mono.mHeroAnimator.AnimationName = "run";
 
         }
 
@@ -51,9 +61,29 @@ namespace GameLogic
         {
             if(loc != mPro.Loc)return;
             
-            if (mAnimatorCtr == null) return;
-            EnumUtil.MoveStatus moveStatus = (EnumUtil.MoveStatus) data;
-            mAnimatorCtr.SetBool("IsWalking", moveStatus == EnumUtil.MoveStatus.移动);
+            // if (mAnimatorCtr == null) return;
+             EnumUtil.MoveStatus moveStatus = (EnumUtil.MoveStatus) data;
+            // mAnimatorCtr.SetBool(IsRun, moveStatus == EnumUtil.MoveStatus.移动);
+            // mAnimatorCtr.SetBool(IsAtk, moveStatus == EnumUtil.MoveStatus.攻击);
+            
+            //Mono.mHeroAnimator.skeleton.SetSlotsToSetupPose();
+            
+            //Mono.mHeroAnimator.AnimationState.ClearTracks();
+            //Mono.mHeroAnimator.AnimationState.SetAnimation(0, moveStatus == EnumUtil.MoveStatus.移动?"run":"atk", false);
+            // Mono.mHeroAnimator.AnimationState.SetAnimation(0, moveStatus == EnumUtil.MoveStatus.移动?"run":"atk", false).Complete += (state) =>
+            // {
+            //         Mono.mHeroAnimator.AnimationState.SetAnimation(0, moveStatus == EnumUtil.MoveStatus.移动?"run":"atk", true);
+            // };
+
+            var state = Mono.mHeroAnimator.AnimationState;
+            var skeleton = Mono.mHeroAnimator.skeleton;
+            state.SetAnimation(0, moveStatus == EnumUtil.MoveStatus.移动 ? "run" : "atk", true);
+
+
+
+            //Mono.mHeroAnimator.state.SetAnimation(0, moveStatus == EnumUtil.MoveStatus.移动?"run":"atk", true);
+            //Mono.mHeroAnimator.AnimationName = moveStatus == EnumUtil.MoveStatus.移动?"run":"atk";
+            //Mono.mHeroAnimator.timeScale=1;
         }
         
         [PlayerMessenger(PlayerProperty.UpdatePlayerProVector, PlayerProEnumKey.position)]
@@ -61,7 +91,11 @@ namespace GameLogic
         {
             if(loc != mPro.Loc)return;
             mTargetMovePostion = data;
-            Mono.mRenderer.flipX = mTransform.position.x > mTargetMovePostion.x;
+            if (Mono.mHeroAnimator != null)
+            {
+                Mono.mHeroAnimator.skeleton.ScaleX = mTransform.position.x > mTargetMovePostion.x ? -1 : 1;
+            }
+            //Mono.mRenderer.flipX = mTransform.position.x > mTargetMovePostion.x;
         }
         
 
@@ -127,7 +161,11 @@ namespace GameLogic
             if (Mono.mLoc > 1)//敌人
             {
                 BasePlayerProperty target = BaseFightData.GetPlayerPro<BasePlayerProperty>(1);
-                Mono.mRenderer.flipX = mTransform.position.x > target.Position.x;
+                if (Mono.mHeroAnimator != null)
+                {
+                    Mono.mHeroAnimator.skeleton.ScaleX = mTransform.position.x > target.Position.x ? -1 : 1;
+                }
+                //Mono.mRenderer.flipX = mTransform.position.x > target.Position.x;
             }
             if(DNP_InputHandler.GetLeftClick())
             {

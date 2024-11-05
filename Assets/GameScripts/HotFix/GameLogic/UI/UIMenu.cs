@@ -75,7 +75,7 @@ namespace GameLogic
 		private void OnClickSettingBtn()
 		{
 			m_textSetting.text = "设置";
-			GameModule.UI.ShowUIAsync<UISetting>();
+			//GameModule.UI.ShowUIAsync<UISetting>();
 			Close();
 		}
 	}

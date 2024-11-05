@@ -113,7 +113,7 @@ namespace GameLogic
                 }
 
                 pro.Target = targetPro == null ? pro : targetPro;
-                Debug.Log($" 当前帧{mCurMaxFrame}-----{GetPropertyStr(pro)}坐标是：{pro.Position}  目标是{pro.Target.Position} ");
+                Debug.Log($" 当前帧{mCurMaxFrame}-----{GetPropertyStr(pro)}坐标是：{pro.Position}  目标是 {pro.Target.Loc}--- {pro.Target.Position} ");
             }
         }
         private void UpdateBuff(BasePlayerProperty pro)
@@ -240,11 +240,10 @@ namespace GameLogic
                 {
                     Vector3 lastPos = pro.Position;
                     Vector3 dir = (pro.Target.Position - pro.Position).normalized;
+                    pro.Position += dir * pro.StimeSpeed;
                     float x = pro.Position.x - pro.Target.Position.x;
                     float z = pro.Position.z - pro.Target.Position.z;
-                    pro.Position += dir * pro.StimeSpeed;
-                    Debug.Log(
-                        $" 当前帧{mCurMaxFrame}-----{GetPropertyStr(pro)}  移动 从 {lastPos}  移动到{pro.Position}  dis：{(x * x + z * z)}   range：{pro.AtkRange * pro.AtkRange}");
+                    //Debug.Log($" 当前帧{mCurMaxFrame}-----{GetPropertyStr(pro)}  移动 从 {lastPos}  移动到{pro.Position}  dis：{(x * x + z * z)}   range：{pro.AtkRange * pro.AtkRange}");
                     if (CollisionCheck.CanAttack(pro.Position, pro.Target.Position, pro.AtkRange))
                     {
                         pro.MoveStatus = EnumUtil.MoveStatus.攻击;

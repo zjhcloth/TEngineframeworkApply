@@ -53,7 +53,7 @@ public class PlayerManager
         pro.CritHurtDis = 100; //忽视爆伤
         pro.AtkSpd = 100; //攻速
         pro.Speed = 1;//移动速度
-        pro.StimeSpeed = 1 * STime.deltaTime;//初始化每帧的速度。避免每帧计算
+        pro.StimeSpeed = 3 * STime.deltaTime;//初始化每帧的速度。避免每帧计算
         pro.NorHurt = 100; //普攻伤害
         pro.NorHurtDef = 100; //普攻抗性
         pro.SkillHurt = 100; //技能伤害
@@ -130,7 +130,7 @@ public class PlayerManager
     /// <param name="playerPro">角色信息</param>
     public static void CreateOneGameObject(PlayerProperty playerPro, bool isMonster = false)
     {
-        string prefab = "card";
+        string prefab = "hero";//"card";
         GameObject obj = FightMemoryManager.Instance.Allocate(prefab, false);
         string rob = isMonster ? "monster" : "player";
         obj.name = rob + "_" + playerPro.Loc;

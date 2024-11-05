@@ -99,6 +99,7 @@ namespace GameLogic
         public async UniTask LoadResByGameMode()
         {
             mAssets.Add("card");
+            mAssets.Add("hero");
             mAssets.Add("Joystick");
             mAssets.Add("PopupNumber");
             await LoadBattleResAsync();
