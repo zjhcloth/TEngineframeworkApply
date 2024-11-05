@@ -42,7 +42,7 @@ namespace GameLogic
             HurtDur = 100; //持续伤害
             HurtDurDef = 100; //持续伤害抗性
             AtkRange = 5;//攻击距离
-            Position = new Vector3(0, 10, 0);
+            Position = new Vector3(0, 0, -7);
             MoveStatus = EnumUtil.MoveStatus.移动;
             Buffs = new Dictionary<EnumUtil.BuffType, Buff>();
         }

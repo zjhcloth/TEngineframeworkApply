@@ -228,7 +228,7 @@ namespace GameLogic
                 {
                     pro.MoveStatus = EnumUtil.MoveStatus.移动;
 
-                    Vector3 dir = new Vector3(mCurMove.x, mCurMove.y, 0).normalized;
+                    Vector3 dir = new Vector3(mCurMove.x, 0, mCurMove.y ).normalized;
                     Debug.Log($"dir:{dir}-----mCurMove:{mCurMove}");
                     pro.Position += dir * pro.StimeSpeed;
                     return;

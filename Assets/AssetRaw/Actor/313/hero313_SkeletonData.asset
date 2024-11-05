@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f1b3b4b945939a54ea0b23d3396115fb, type: 3}
-  m_Name: hero313_SkeletonData
+  m_Name: Assets/AssetRaw/Actor/313/hero313_SkeletonData.asset
   m_EditorClassIdentifier: 
   atlasAssets:
   - {fileID: 11400000, guid: dc590ab46ede70a45a8b03b13b1ea140, type: 2}
@@ -24,14 +24,8 @@ MonoBehaviour:
     multiplyMaterials: []
     screenMaterials: []
   skeletonDataModifiers: []
-  fromAnimation:
-  - atk
-  - run
-  toAnimation:
-  - run
-  - atk
-  duration:
-  - 0.1
-  - 0.1
-  defaultMix: 0.1
+  fromAnimation: []
+  toAnimation: []
+  duration: []
+  defaultMix: 0
   controller: {fileID: 9100000, guid: 287e5359d67bc504484e2048caaf98a5, type: 2}

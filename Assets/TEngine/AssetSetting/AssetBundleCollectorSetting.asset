@@ -37,6 +37,22 @@ MonoBehaviour:
         FilterRuleName: CollectPrefab
         AssetTags: 
         UserData: 
+      - CollectPath: Assets/AssetRaw/Actor/133/hero133_SkeletonData.asset
+        CollectorGUID: 43bcc5d762235d649a149f4004bb188d
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/AssetRaw/Actor/313/hero313_SkeletonData.asset
+        CollectorGUID: 3f10a6188268a9d4f847d7bc1c964cb8
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
     - GroupName: UIRaw
       GroupDesc: "\u56FE\u7247\u8D44\u6E90"
       AssetTags: UIRaw

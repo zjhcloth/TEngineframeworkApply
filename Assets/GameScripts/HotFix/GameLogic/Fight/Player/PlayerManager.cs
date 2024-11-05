@@ -53,7 +53,7 @@ public class PlayerManager
         pro.CritHurtDis = 100; //忽视爆伤
         pro.AtkSpd = 100; //攻速
         pro.Speed = 1;//移动速度
-        pro.StimeSpeed = 3 * STime.deltaTime;//初始化每帧的速度。避免每帧计算
+        pro.StimeSpeed = 1 * STime.deltaTime;//初始化每帧的速度。避免每帧计算
         pro.NorHurt = 100; //普攻伤害
         pro.NorHurtDef = 100; //普攻抗性
         pro.SkillHurt = 100; //技能伤害
@@ -61,7 +61,7 @@ public class PlayerManager
         pro.HurtDur = 100; //持续伤害
         pro.HurtDurDef = 100; //持续伤害抗性
         pro.AtkRange = 3;//攻击距离
-        pro.Position = new Vector3(-3, 7, -10);
+        pro.Position = new Vector3(2.5f, 0, -7);
         pro.MoveStatus = EnumUtil.MoveStatus.移动;
         pro.Buffs = new Dictionary<EnumUtil.BuffType, Buff>();
         pro.IsDie = false;
@@ -110,7 +110,7 @@ public class PlayerManager
         pro.HurtDur = 100; //持续伤害
         pro.HurtDurDef = 100; //持续伤害抗性
         pro.AtkRange = 2f;//攻击距离
-        pro.Position = new Vector3(3, 7, -10);
+        pro.Position = new Vector3(0, 0, -7);
         pro.MoveStatus = EnumUtil.MoveStatus.移动;
         pro.Buffs = new Dictionary<EnumUtil.BuffType, Buff>();
         pro.IsDie = false;

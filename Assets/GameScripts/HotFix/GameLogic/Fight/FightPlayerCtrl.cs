@@ -2,6 +2,7 @@ using Cysharp.Threading.Tasks;
 using DamageNumbersPro;
 using DamageNumbersPro.Demo;
 using Spine;
+using Spine.Unity;
 using TEngine;
 using UnityEditor.Animations;
 using UnityEngine;
@@ -32,17 +33,24 @@ namespace GameLogic
 
         public async void InitAsync(int loc, GameObject obj)
         {
-            if(loc==1)
-                mPro = BaseFightData.GetPlayerPro<PlayerProperty>(loc);
-            else 
-                mPro = BaseFightData.GetEnemyPlayerPro<PlayerProperty>(loc);
             Mono = obj.GetComponent<FightPlayerMono>();
             mTransform = obj.GetComponent<RectTransform>();
+            if (loc == 1)
+            {
+                mPro = BaseFightData.GetPlayerPro<PlayerProperty>(loc);
+                MainFightCtrl.Instance.mainCamera.gameObject.transform.parent = obj.transform;
+            }
+            else
+            {
+                mPro = BaseFightData.GetEnemyPlayerPro<PlayerProperty>(loc);
+            }
+
+
             Mono.transform.position = mPro.Position;
             Debug.Log(loc + " Init----mPro" + mPro.Position);
             //Mono.transform.localScale = new Vector3(2, 2, 2);
             Mono.mLoc = loc;
-
+            
             // AnimatorController ctrl =
             //     await GameModule.Resource.LoadAssetAsync<AnimatorController>(loc == 2
             //         ? "ctrl_card2021"
@@ -52,6 +60,11 @@ namespace GameLogic
             popupPrefab = go.GetComponent<DamageNumber>();
             mAnimatorCtr = new PlayerAnimator(Mono.mAnimator);
             mAnimatorCtr.SetBool(IsRun, true);
+            SkeletonDataAsset SkeletData = await GameModule.Resource.LoadAssetAsync<SkeletonDataAsset>(
+                loc == 2?"hero313_SkeletonData":"hero133_SkeletonData");
+            Mono.mHeroAnimator.ClearState();
+            Mono.mHeroAnimator.skeletonDataAsset = SkeletData;
+            Mono.mHeroAnimator.Initialize(true);
             Mono.mHeroAnimator.AnimationName = "run";
 
         }
