@@ -165,7 +165,7 @@ MonoBehaviour:
         FilterRuleName: CollectAll
         AssetTags: 
         UserData: 
-      - CollectPath: Assets/MyShaderVariants.shadervariants
+      - CollectPath: Assets/AssetRaw/MyShaderVariants.shadervariants
         CollectorGUID: 2ba6eaf34c263f844be4aa73dccc9f4a
         CollectorType: 0
         AddressRuleName: AddressByFileName

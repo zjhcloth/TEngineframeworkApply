@@ -58,7 +58,7 @@ namespace GameLogic
                 {
                     speed = 2;
                     userCtrl = true;
-                    animator.SetBool("IsWalking", true);
+                    animator.SetBool("IsRun", true);
                     //角色不用移动，移动背景就好了
                     Vector3 direction = new Vector3(v.x, 0, v.y);
                     controller.Move(direction * speed * Time.deltaTime);
@@ -97,7 +97,7 @@ namespace GameLogic
                 else
                 {
                     userCtrl = false;
-                    animator.SetBool("IsWalking", false);
+                    animator.SetBool("IsRun", false);
                     LeaderMoveDir = MoveDir.None;
                     //autoWalk = true;
                     //TargetPosition = new Vector3(-4,-2,-7);

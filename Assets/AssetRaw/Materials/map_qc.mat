@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Base
+  m_Name: map_qc
   m_Shader: {fileID: 4800000, guid: 01bed6fd77efd1e4092faed194cb44d1, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -30,6 +30,6 @@ Material:
     m_Ints: []
     m_Floats:
     - _SwerveX: 0
-    - _SwerveY: 0
+    - _SwerveY: -0.2
     m_Colors: []
   m_BuildTextureStacks: []
