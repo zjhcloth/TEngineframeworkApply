@@ -19,6 +19,6 @@ public class TestRotation : MonoBehaviour
               float angle = rotationSpeed * Time.deltaTime;
 
               // 围绕旋转中心旋转  
-              transform.RotateAround(rotationCenter.position, rotationAxis, angle);
+              transform.RotateAround(rotationCenter.position, rotationCenter.forward, angle);
        }
 }
